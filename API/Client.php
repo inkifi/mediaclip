@@ -9,7 +9,7 @@ final class Client extends \Df\API\Client {
 	 * @see \Df\API\Client::_construct()
 	 * @used-by \Df\API\Client::__construct()
 	 */
-	protected function _construct() {parent::_construct(); $this->resJson();}
+	protected function _construct() {parent::_construct(); $this->reqJson();  $this->resJson();}
 
 	/**
 	 * 2019-01-12 https://doc.mediacliphub.com/pages/Api/authorization.html
