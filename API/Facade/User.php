@@ -1,6 +1,5 @@
 <?php
 namespace Inkifi\Mediaclip\API\Facade;
-use Df\API\Operation as Op;
 use Df\Core\Exception as DFE;
 use Magento\Store\Model\Store;
 // 2019-01-12
@@ -18,10 +17,10 @@ final class User extends \Df\API\Facade {
 	/**
 	 * 2019-01-12
 	 * @used-by \Inkifi\Mediaclip\T\CaseT\Projects::t01()
-	 * @return Op
+	 * @return array(array(string => string))
 	 * @throws DFE
 	 */
-	function projects() {return $this->p([], null, __FUNCTION__);}
+	function projects() {return $this->p([], null, __FUNCTION__)->a(__FUNCTION__);}
 
 	/**
 	 * 2019-01-12
