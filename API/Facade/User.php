@@ -20,7 +20,9 @@ final class User extends \Df\API\Facade {
 	 * @return array(array(string => string))
 	 * @throws DFE
 	 */
-	function projects() {return $this->p([], null, __FUNCTION__)->a(__FUNCTION__);}
+	function projects() {$m = __FUNCTION__; return df_try(
+		function() use($m) {return array_column($this->p([], null, $m, true)->a($m), 'id');}, []
+	);}
 
 	/**
 	 * 2019-01-12
