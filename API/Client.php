@@ -19,9 +19,10 @@ final class Client extends \Df\API\Client {
 	 * @used-by \Df\API\Client::p()
 	 * @return array(string => string)
 	 */
-	protected function headers() {$s = $this->s(); return ['Authorization' => df_cc_s('HubApi', base64_encode(
-		implode(':', [$s->id(), $s->key()])
-	))];}
+	protected function headers() {$s = $this->s(); return [
+		'Authorization' => df_cc_s('HubApi', base64_encode(implode(':', [$s->id(), $s->key()])))
+		,'Content-Type' => 'application/json'
+	];}
 
 	/**
 	 * 2019-01-11
