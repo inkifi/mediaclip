@@ -7,6 +7,7 @@ use Magento\Store\Model\Store;
  * 2018-08-16
  * «Modify orders numeration for Mediaclip»
  * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
+ * @used-by \Inkifi\Mediaclip\Event::oidI()
  * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::execute()
  * @used-by \Mangoit\MediaclipHub\Controller\Index\PwintyOrderStatusUpdate::execute()
  * @param string $v
