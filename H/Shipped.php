@@ -42,6 +42,12 @@ final class Shipped {
 				$loggers = $ev->oidE()." No item found to make shipment.";
 			}
 			else {
+				/**
+				 * 2019-02-24 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+				 * This code seems to be ported from Magento 1 and it should not work in Magento 2
+				 * because the `prepareShipment()`
+				 * @see \Magento\Sales\Model\Order::prepareShipment() method is absent in Magento 2.
+				 */
 				$shipment = $o->prepareShipment($qtys);
 				$shipment->register();
 				$shipment->sendEmail(true)->setEmailSent(true)->save();
