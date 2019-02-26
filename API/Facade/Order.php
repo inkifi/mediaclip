@@ -1,8 +1,11 @@
 <?php
 namespace Inkifi\Mediaclip\API\Facade;
 use Magento\Store\Model\Store;
-// 2019-02-26
-/** @method static Order s()  */
+/**
+ * 2019-02-26
+ * @used-by ikf_api_order_lines()
+ * @method static Order s()
+ */
 final class Order extends \Df\API\Facade {
 	/**
 	 * 2019-02-26

@@ -1,5 +1,7 @@
 <?php
 namespace Inkifi\Mediaclip\H\AvailableForDownload;
+use Inkifi\Mediaclip\API\Entity\Order\Item as mOI;
+use Inkifi\Mediaclip\API\Entity\Project;
 use Inkifi\Mediaclip\Event as Ev;
 use Inkifi\Mediaclip\H\Logger as L;
 use Magento\Catalog\Model\Product;
@@ -7,7 +9,6 @@ use Magento\Customer\Model\Customer;
 use Magento\Eav\Api\AttributeSetRepositoryInterface as IAttributeSetRepository;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Item as OI;
-use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OIC;
 use Mangoit\MediaclipHub\Model\Product as mP;
 use Zend\Log\Logger as zL;
 // 2019-02-24
@@ -32,19 +33,17 @@ final class Pureprint {
 		$mOrderDetails = mc_h()->getMediaClipOrders($o->getEntityId());
 		$date = mc_h()->createOrderDirectoryDate($o->getCreatedAt()); /** @var string $date */
 		$array = [];
-		L::l('mediaclipOrderDetails->lines count: ' . count($mOrderDetails->lines));
-		foreach ($mOrderDetails->lines as $lines) {
-			L::l('A line:');  L::l($lines);
-			$projectDetails = ikf_project_details($lines->projectId);
-			L::l('projectDetails:'); L::l($projectDetails);
-			$oi = df_oic()->addFieldToFilter('mediaclip_project_id', [
-				'eq' => $projectDetails['projectId'
-			]])->getLastItem(); /** @var OI $oi */
+		foreach (ikf_api_oi($o->getId()) as $mOI) { /** @var mOI $mOI */
+			L::l('A line:'); L::l($mOI->a());
+			$project = $mOI->project(); /** @var Project $project */
+			L::l('projectDetails:'); L::l($project->a());
+			$oi = df_oic()->addFieldToFilter('mediaclip_project_id', ['eq' => $project->id()])
+				->getLastItem(); /** @var OI $oi */
 			$orderQuantity = (int)$oi->getQtyOrdered();
 			$module = $this->mediaclipModuleName($oi->getData('product_id'));
 			L::l("Module: $module");
 			/** @var array(string => mixed) $mP */
-			$mP = df_new_om(mP::class)->load($projectDetails['items'][0]['plu'], 'plu')->getData();
+			$mP = df_new_om(mP::class)->load($project['items'][0]['plu'], 'plu')->getData();
 			L::l('Mediaclip Product:');  L::l($mP);
 			$ftp_json = $mP['ftp_json'];
 			$zl->info($ftp_json);
@@ -61,7 +60,7 @@ final class Pureprint {
 				$zl->info(json_encode($filesUploadPath));
 				$array['destination']['name'] = 'pureprint';
 				$array['orderData']['sourceOrderId'] = $mOrderDetails->storeData->orderId;
-				$linesDetails = mc_h()->getMediaClipOrderLinesDetails($lines->id);
+				$linesDetails = mc_h()->getMediaClipOrderLinesDetails($mOI->id());
 				L::l('linesDetails->files count: ' . count($linesDetails->files));
 if (count($linesDetails->files)) {
 L::l('linesDetails->files:');  L::l($linesDetails->files);
@@ -92,7 +91,7 @@ L::l('linesDetails->files:');  L::l($linesDetails->files);
 */
 $array['orderData']['items'][] = [
 'sku' => $mP['plu']
-,'sourceItemId' => $lines->id
+,'sourceItemId' => $mOI->id()
 ,'components' => array_values(df_map($linesDetails->files, function($f) use($module, $mP) {return [
 'code' => dfa($mP, 'json_code', $this->code(dfo($f, 'id'), $module)), 'fetch' => true, 'path' => $f->url
 ];}))

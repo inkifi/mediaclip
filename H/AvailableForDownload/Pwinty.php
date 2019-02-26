@@ -1,5 +1,7 @@
 <?php
 namespace Inkifi\Mediaclip\H\AvailableForDownload;
+use Inkifi\Mediaclip\API\Entity\Order\Item as mOI;
+use Inkifi\Mediaclip\API\Entity\Project;
 use Inkifi\Mediaclip\Event as Ev;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\App\Config\ScopeConfigInterface as IScopeConfig;
@@ -55,10 +57,9 @@ final class Pwinty {
 			$date = mc_h()->createOrderDirectoryDate($o->getCreatedAt()); /** @var string $date */
 			$imageArray = [];
 			$catalogue = $pwinty->getCatalogue('GB', 'Pro');
-			foreach (mc_h()->getMediaClipOrders($o->getId())->lines as $line) {
-				/** @var array(string => $mixed) $project */
-				$project = ikf_project_details($line->projectId);
-				$oi = df_oic()->addFieldToFilter('mediaclip_project_id', ['eq' => $project['projectId']])
+			foreach (ikf_api_oi($o->getId()) as $mOI) { /** @var mOI $mOI */
+				$project = $mOI->project(); /** @var Project $project */
+				$oi = df_oic()->addFieldToFilter('mediaclip_project_id', ['eq' => $project->id()])
 					->getLastItem(); /** @var OI $oi */
 				/** @var array(string => mixed) $mP */
 				$mP = df_new_om(mP::class)->load($project['items'][0]['plu'], 'plu')->getData();
