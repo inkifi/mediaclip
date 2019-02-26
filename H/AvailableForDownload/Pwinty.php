@@ -52,7 +52,7 @@ final class Pwinty {
 			// «Modify orders numeration for Mediaclip»
 			// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 			$o = df_order($ev->oidI()); /** @var O $o */
-			$orderDirDate = mc_h()->createOrderDirectoryDate($o->getCreatedAt());
+			$date = mc_h()->createOrderDirectoryDate($o->getCreatedAt()); /** @var string $date */
 			$imageArray = [];
 			$catalogue = $pwinty->getCatalogue('GB', 'Pro');
 			foreach (mc_h()->getMediaClipOrders($o->getId())->lines as $line) {
@@ -65,7 +65,7 @@ final class Pwinty {
 				$pwintyProduct = $mP['pwinty_product_name'];
 				$frameColour = $mP['frame_colour'];
 				$filesUploadPath = df_cc_path(
-					BP, 'mediaclip_orders', $orderDirDate, 'pwinty'
+					BP, 'mediaclip_orders', $date, 'pwinty'
 					,$o->getIncrementId()
 					,$oi->getId()
 					,$mP['product_label']

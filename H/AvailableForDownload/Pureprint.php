@@ -29,26 +29,19 @@ final class Pureprint {
 		// «Modify orders numeration for Mediaclip»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 		$o = df_order($ev->oidI()); /** @var O $o */
-		$entityId = $o->getEntityId();
-		$orderDate = $o['created_at'];
-		$mOrderDetails = mc_h()->getMediaClipOrders($entityId);
-		$orderDirDate = mc_h()->createOrderDirectoryDate($orderDate);
+		$mOrderDetails = mc_h()->getMediaClipOrders($o->getEntityId());
+		$date = mc_h()->createOrderDirectoryDate($o->getCreatedAt()); /** @var string $date */
 		$array = [];
 		L::l('mediaclipOrderDetails->lines count: ' . count($mOrderDetails->lines));
 		foreach ($mOrderDetails->lines as $lines) {
 			L::l('A line:');  L::l($lines);
 			$projectDetails = ikf_project_details($lines->projectId);
 			L::l('projectDetails:'); L::l($projectDetails);
-			$module = '';
-			$orderQuantity = 1;
-			$oiC = df_oic()->addFieldToFilter('mediaclip_project_id', [
+			$oi = df_oic()->addFieldToFilter('mediaclip_project_id', [
 				'eq' => $projectDetails['projectId'
-			]]); /** @var $oiC OIC */
-			foreach ($oiC as $oi) { /** @var OI $oi */
-				$orderItemID = $oi->getData('item_id');
-				$orderQuantity = (int)$oi->getQtyOrdered();
-				$module = $this->mediaclipModuleName($oi->getData('product_id'));
-			}
+			]])->getLastItem(); /** @var OI $oi */
+			$orderQuantity = (int)$oi->getQtyOrdered();
+			$module = $this->mediaclipModuleName($oi->getData('product_id'));
 			L::l("Module: $module");
 			/** @var array(string => mixed) $mP */
 			$mP = df_new_om(mP::class)->load($projectDetails['items'][0]['plu'], 'plu')->getData();
@@ -60,8 +53,8 @@ final class Pureprint {
 			$includeQuantityInJSON = $mP['include_quantity_in_json'];
 			if ($ftp_json == 1) {
 				$filesUploadPath =
-					BP.'/mediaclip_orders/'.$orderDirDate.'/ascendia/'
-					.$o->getIncrementId().'/'.$orderItemID.'/'
+					BP.'/mediaclip_orders/'.$date.'/ascendia/'
+					.$o->getIncrementId().'/'.$oi->getId().'/'
 					.$mP['product_label']
 				;
 				L::l("filesUploadPath: $filesUploadPath");
@@ -117,7 +110,7 @@ $array['orderData']['items'][] = [
 			$countryCode = $address->getCountryId();
 			$region = $address->getRegion();
 			$telephone = $address->getTelephone();
-			if ($address->getCompany() != ''){
+			if ($address->getCompany() != '') {
 				$street1 = $address->getCompany() . ',' . $address->getStreet()[0];
 			}
 			else {
@@ -153,7 +146,7 @@ $array['orderData']['items'][] = [
 			// hardcoded filesystem path with a dynamics one":
 			// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/3
 			$filesUploadPath = df_cc_path(
-				BP, 'ftp_json', $orderDirDate, $o->getIncrementId(), $orderItemID, $mP['product_label']
+				BP, 'ftp_json', $date, $o->getIncrementId(), $oi->getId(), $mP['product_label']
 			);
 			L::l("filesUploadPath: $filesUploadPath");
 			$zl->info(json_encode($filesUploadPath));
