@@ -30,14 +30,14 @@ final class Pwinty {
 			$oi[Schema::OI__ITEM_DOWNLOAD_STATUS] = 1;
 			$oi->save();
 		}
+		// check if all items are downloaded
 		// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 		// «Modify orders numeration for Mediaclip»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
-		$oiC = df_oic()->addFieldToFilter('order_id', ['eq' => $ev->oidI()]);
-		foreach ($oiC as $oi) { /** @var OI $oi */
-			$status[] = $oi[Schema::OI__ITEM_DOWNLOAD_STATUS];
-		}
-		if (!in_array(0, $status)) { // check if all items are downloaded
+		if (!df_find(
+			df_oic()->addFieldToFilter('order_id', ['eq' => $ev->oidI()])
+			,function(OI $oi) {return !$oi[Schema::OI__ITEM_DOWNLOAD_STATUS];}
+		)) {
 			$merchantId = df_o(IScopeConfig::class)->getValue('api/pwinty_api_auth/merchant_id');
 			$apiKey = df_o(IScopeConfig::class)->getValue('api/pwinty_api_auth/pwinty_api_key');
 			$pwinty = new PhpPwinty([
@@ -45,17 +45,13 @@ final class Pwinty {
 				,'apiKey' => $apiKey
 				,'merchantId' => $merchantId
 			]);
-			$catalogue = $pwinty->getCatalogue( //check pwinty product
-				"GB",               //country code
-				"Pro"               //quality
-			);
+			$catalogue = $pwinty->getCatalogue('GB', 'Pro');
 			// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 			// «Modify orders numeration for Mediaclip»
 			// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
-			$order = df_new_om(O::class)->load($ev->oidI());
-			$orderIncrementId = $order['increment_id'];
-			$entityId = $order->getEntityId();
-			$orderDate = $order['created_at'];
+			$o = df_new_om(O::class)->load($ev->oidI()); /** @var O $o */
+			$entityId = $o->getEntityId();
+			$orderDate = $o->getCreatedAt();
 			$mOrderDetails = mc_h()->getMediaClipOrders($entityId);
 			foreach ($mOrderDetails->lines as $lines){
 				$projectId = $lines->projectId;
@@ -78,11 +74,10 @@ final class Pwinty {
 				$mP = df_new_om(mP::class)->load($value['items'][0]['plu'], 'plu')->getData();
 				$pwintyProduct = $mP['pwinty_product_name'];
 				$frameColour = $mP['frame_colour'];
-				$filesUploadPath =
-					$base.'/mediaclip_orders/'.$orderDirDate.'/pwinty/'
-					.$orderIncrementId.'/'.$orderItemID
-					.'/'.$mP['product_label']
-				;
+				$filesUploadPath = df_cc_path(
+					$base, 'mediaclip_orders', $orderDirDate, 'pwinty'
+					,$o->getIncrementId(), $orderItemID, $mP['product_label']
+				);
 				$imgPath = explode('html/', $filesUploadPath);
 				$storeManager = df_o(IStoreManager::class);
 				$store = $storeManager->getStore();
@@ -115,7 +110,7 @@ final class Pwinty {
 				}
 			}
 			$imageArray = array_values($imageArray);
-			$address = $order->getShippingAddress();
+			$address = $o->getShippingAddress();
 			$postcode = $address->getPostcode();
 			$countryCode = $address->getCountryId();
 			$region = $address->getRegion();
@@ -130,11 +125,11 @@ final class Pwinty {
 				$street2 = '';
 			}
 			$city = $address->getCity();
-			$customerId = $order->getCustomerId();
+			$customerId = $o->getCustomerId();
 			$customer = df_new_om(Customer::class)->load($customerId);
 			$name = $customer['firstname'].' '.$customer['lastname'];
 			$email = $customer['email'];
-			$order = $pwinty->createOrder(// create order to pwinty
+			$pOrder = $pwinty->createOrder(// create order to pwinty
 				$name,          //name
 				$email,         //email address
 				$street1,    //address1
@@ -151,8 +146,8 @@ final class Pwinty {
 			$writer = new \Zend\Log\Writer\Stream(BP . '/var/log/pwinty_orders_status.log');
 			$logger = new \Zend\Log\Logger();
 			$logger->addWriter($writer);
-			$logger->info($order);
-			$pwintyOrderId = $order['id'];
+			$logger->info($pOrder);
+			$pwintyOrderId = $pOrder['id'];
 			//save pwinty id to custom table
 			$mOrderModel = df_new_om(mOrder::class);
 			$mOrderModelCollection = $mOrderModel->getCollection();
