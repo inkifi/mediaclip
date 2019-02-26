@@ -6,6 +6,7 @@ use Inkifi\Mediaclip\H\AvailableForDownload\Pwinty;
 use Inkifi\Mediaclip\H\Logger as L;
 use Magento\Catalog\Model\Product;
 use Mangoit\MediaclipHub\Model\Orders as mOrder;
+use Zend\Log\Logger as zL;
 // 2019-02-24
 final class AvailableForDownload {
 	/**
@@ -20,7 +21,7 @@ final class AvailableForDownload {
 	 */
 	private function _p() {
     	$ev = Ev::s(); /** @var Ev $ev */
-    	$l = ikf_logger('mediaclip_orders_download_shipment_status');
+    	$l = ikf_logger('mediaclip_orders_download_shipment_status'); /** @var zL $l */
 		$l->info($ev->oidE());
 		$l->info($ev->j());
 		//Set mediaclip order status to 1 as the order is downloaded
