@@ -9,6 +9,7 @@ use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Item as OI;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OIC;
 use Mangoit\MediaclipHub\Model\Product as mP;
+use Zend\Log\Logger as zL;
 // 2019-02-24
 final class Pureprint {
 	/**
@@ -23,9 +24,7 @@ final class Pureprint {
 	 */
 	private function _p() {
 		$ev = Ev::s(); /** @var Ev $ev */
-		$writer = new \Zend\Log\Writer\Stream(BP . '/var/log/json_status.log');
-		$logger = new \Zend\Log\Logger();
-		$logger->addWriter($writer);
+		$zl = ikf_logger('json_status'); /** @var zL $order */
 		// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 		// «Modify orders numeration for Mediaclip»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
@@ -56,7 +55,7 @@ final class Pureprint {
 			$mP = df_new_om(mP::class)->load($projectDetails['items'][0]['plu'], 'plu')->getData();
 			L::l('Mediaclip Product:');  L::l($mP);
 			$ftp_json = $mP['ftp_json'];
-			$logger->info($ftp_json);
+			$zl->info($ftp_json);
 			L::l('Send Json: ' . $ftp_json);
 			#@var $includeQuantityInJSON flag to include json
 			$includeQuantityInJSON = $mP['include_quantity_in_json'];
@@ -67,7 +66,7 @@ final class Pureprint {
 					.$mP['product_label']
 				;
 				L::l("filesUploadPath: $filesUploadPath");
-				$logger->info(json_encode($filesUploadPath));
+				$zl->info(json_encode($filesUploadPath));
 				$array['destination']['name'] = 'pureprint';
 				$array['orderData']['sourceOrderId'] = $mOrderDetails->storeData->orderId;
 				$linesDetails = mc_h()->getMediaClipOrderLinesDetails($lines->id);
@@ -112,7 +111,7 @@ $array['orderData']['items'][] = [
 		}
 		L::l('array:'); L::l($array);
 		if (!empty($array)) {
-			$logger->info(json_encode($array));
+			$zl->info(json_encode($array));
 			$shippingMethod = $order->getShippingMethod();
 			$address = $order->getShippingAddress();
 			$postcode = $address->getPostcode();
@@ -158,7 +157,7 @@ $array['orderData']['items'][] = [
 				BP, 'ftp_json', $orderDirDate, $orderIncrementId, $orderItemID, $mP['product_label']
 			);
 			L::l("filesUploadPath: $filesUploadPath");
-			$logger->info(json_encode($filesUploadPath));
+			$zl->info(json_encode($filesUploadPath));
 			// 2018-08-20 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 			// «FTP upload to ftp.pureprint.com has stopped working»
 			// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/6
