@@ -24,14 +24,13 @@ final class Pureprint {
 	 */
 	private function _p() {
 		$ev = Ev::s(); /** @var Ev $ev */
-		$zl = ikf_logger('json_status'); /** @var zL $order */
+		$zl = ikf_logger('json_status'); /** @var zL $zl */
 		// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 		// «Modify orders numeration for Mediaclip»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
-		$order = df_new_om(O::class)->load($ev->oidI());
-		$orderIncrementId = $order['increment_id'];
-		$entityId = $order->getEntityId();
-		$orderDate = $order['created_at'];
+		$o = df_order($ev->oidI()); /** @var O $o */
+		$entityId = $o->getEntityId();
+		$orderDate = $o['created_at'];
 		$mOrderDetails = mc_h()->getMediaClipOrders($entityId);
 		$orderDirDate = mc_h()->createOrderDirectoryDate($orderDate);
 		$array = [];
@@ -62,7 +61,7 @@ final class Pureprint {
 			if ($ftp_json == 1) {
 				$filesUploadPath =
 					BP.'/mediaclip_orders/'.$orderDirDate.'/ascendia/'
-					.$orderIncrementId.'/'.$orderItemID.'/'
+					.$o->getIncrementId().'/'.$orderItemID.'/'
 					.$mP['product_label']
 				;
 				L::l("filesUploadPath: $filesUploadPath");
@@ -112,8 +111,8 @@ $array['orderData']['items'][] = [
 		L::l('array:'); L::l($array);
 		if (!empty($array)) {
 			$zl->info(json_encode($array));
-			$shippingMethod = $order->getShippingMethod();
-			$address = $order->getShippingAddress();
+			$shippingMethod = $o->getShippingMethod();
+			$address = $o->getShippingAddress();
 			$postcode = $address->getPostcode();
 			$countryCode = $address->getCountryId();
 			$region = $address->getRegion();
@@ -131,7 +130,7 @@ $array['orderData']['items'][] = [
 				$street2 = '';
 			}
 			$city = $address->getCity();
-			$customerId = $order->getCustomerId();
+			$customerId = $o->getCustomerId();
 			$customer = df_new_om(Customer::class)->load($customerId);
 			$name = $address->getFirstname().' '.$address->getLastname();
 			$email = $customer['email'];
@@ -154,7 +153,7 @@ $array['orderData']['items'][] = [
 			// hardcoded filesystem path with a dynamics one":
 			// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/3
 			$filesUploadPath = df_cc_path(
-				BP, 'ftp_json', $orderDirDate, $orderIncrementId, $orderItemID, $mP['product_label']
+				BP, 'ftp_json', $orderDirDate, $o->getIncrementId(), $orderItemID, $mP['product_label']
 			);
 			L::l("filesUploadPath: $filesUploadPath");
 			$zl->info(json_encode($filesUploadPath));
@@ -167,7 +166,7 @@ $array['orderData']['items'][] = [
 				,'password' => 'Summ3rD4ys!'
 			]);
 			/* Check SKU code here */
-			$jsonFileName = $orderIncrementId.'.json';
+			$jsonFileName = $o->getIncrementId().'.json';
 			$jsonFile = $filesUploadPath.'/'.$jsonFileName;
 			$jsonRemoteFile = '/Inkifi/'.$jsonFileName;
 			df_file()->mkdir($filesUploadPath);
