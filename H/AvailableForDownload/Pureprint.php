@@ -19,6 +19,10 @@ final class Pureprint {
 	 */
 	private function __construct() {}
 
+	/**
+	 * 2019-02-24
+	 * @used-by p()
+	 */
 	private function _p() {
 		$ev = Ev::s(); /** @var Ev $ev */
 		$writer = new \Zend\Log\Writer\Stream(BP . '/var/log/json_status.log');
@@ -37,9 +41,7 @@ final class Pureprint {
 		L::l('mediaclipOrderDetails->lines count: ' . count($mOrderDetails->lines));
 		foreach ($mOrderDetails->lines as $lines) {
 			L::l('A line:');  L::l($lines);
-			$projectId = $lines->projectId;
-			$projectData = df_new_om(Mediaclip::class)->load($projectId, 'project_id')->getData();
-			$projectDetails = json_decode($projectData['project_details'], true);
+			$projectDetails = ikf_m_project_details($lines->projectId);
 			L::l('projectDetails:'); L::l($projectDetails);
 			$module = '';
 			$orderQuantity = 1;

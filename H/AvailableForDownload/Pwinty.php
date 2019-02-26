@@ -21,6 +21,10 @@ final class Pwinty {
 	 */
 	private function __construct() {}
 
+	/**
+	 * 2019-02-24
+	 * @used-by p()
+	 */
 	private function _p() {
 		$ev = Ev::s(); /** @var Ev $ev */
 		//set order item status to 1 as response of each line item receives
@@ -51,10 +55,7 @@ final class Pwinty {
 			$o = df_order($ev->oidI()); /** @var O $o */
 			$mOrderDetails = mc_h()->getMediaClipOrders($o->getId());
 			foreach ($mOrderDetails->lines as $lines) {
-				$projectId = $lines->projectId;
-				$projectData = df_new_om(Mediaclip::class)
-					->load($projectId, 'project_id')->getData();
-				$projectDetails[] = json_decode($projectData['project_details'], true);
+				$projectDetails[] = ikf_m_project_details($lines->projectId);
 			}
 			$orderDirDate = mc_h()->createOrderDirectoryDate($o->getCreatedAt());
 			$imageArray = [];
