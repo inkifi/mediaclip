@@ -1,6 +1,7 @@
 <?php
 namespace Inkifi\Mediaclip\API;
 use Inkifi\Mediaclip\Settings as S;
+use Zend_Http_Client as C;
 // 2019-01-11
 final class Client extends \Df\API\Client {
 	/**
@@ -16,13 +17,14 @@ final class Client extends \Df\API\Client {
 	 * @override
 	 * @see \Df\API\Client::headers()
 	 * @used-by \Df\API\Client::__construct()
-	 * @used-by \Df\API\Client::p()
+	 * @used-by \Df\API\Client::_p()
 	 * @return array(string => string)
 	 */
-	protected function headers() {$s = $this->s(); return [
-		'Authorization' => df_cc_s('HubApi', base64_encode(implode(':', [$s->id(), $s->key()])))
-		,'Content-Type' => 'application/json'
-	];}
+	protected function headers() {$s = $this->s(); return
+		['Authorization' => df_cc_s('HubApi', base64_encode(implode(':', [$s->id(), $s->key()])))]
+		// 2019-02-26 Mediaclip does not allow the `Content-Type` header in `GET` requests.
+		+ (C::GET === $this->method() ? [] : ['Content-Type' => 'application/json'])
+	;}
 
 	/**
 	 * 2019-01-11
