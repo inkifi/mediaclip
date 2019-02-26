@@ -45,22 +45,20 @@ final class Pwinty {
 				,'apiKey' => $apiKey
 				,'merchantId' => $merchantId
 			]);
-			$catalogue = $pwinty->getCatalogue('GB', 'Pro');
 			// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 			// «Modify orders numeration for Mediaclip»
 			// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
-			$o = df_new_om(O::class)->load($ev->oidI()); /** @var O $o */
-			$entityId = $o->getEntityId();
-			$orderDate = $o->getCreatedAt();
-			$mOrderDetails = mc_h()->getMediaClipOrders($entityId);
-			foreach ($mOrderDetails->lines as $lines){
+			$o = df_order($ev->oidI()); /** @var O $o */
+			$mOrderDetails = mc_h()->getMediaClipOrders($o->getId());
+			foreach ($mOrderDetails->lines as $lines) {
 				$projectId = $lines->projectId;
 				$projectData = df_new_om(Mediaclip::class)
 					->load($projectId, 'project_id')->getData();
 				$projectDetails[] = json_decode($projectData['project_details'], true);
 			}
-			$orderDirDate = mc_h()->createOrderDirectoryDate($orderDate);
+			$orderDirDate = mc_h()->createOrderDirectoryDate($o->getCreatedAt());
 			$imageArray = [];
+			$catalogue = $pwinty->getCatalogue('GB', 'Pro');
 			foreach ($projectDetails as $value) {
 				$oiC->clear()->getSelect()->reset('where');
 				$salesOrderItem = $oiC->addFieldToFilter('mediaclip_project_id', ['eq' => $value['projectId']]);
@@ -95,7 +93,7 @@ final class Pwinty {
 							$imgAttribute['priceToUser'] = "0";
 							$imgAttribute['copies'] = $quantity+1;
 							$imgAttribute['type'] = $pwintyProduct;
-							foreach ($catalogue['items'] as  $value) {
+							foreach ($catalogue['items'] as $value) {
 								//check if product has frame attribute
 								if ($value['name'] == $pwintyProduct) {
 									if($frameColour != "" && !empty($value['attributes'])) {
