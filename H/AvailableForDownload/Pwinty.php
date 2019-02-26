@@ -11,6 +11,7 @@ use Magento\Store\Model\StoreManagerInterface as IStoreManager;
 use Mangoit\MediaclipHub\Model\Mediaclip;
 use Mangoit\MediaclipHub\Model\Orders as mOrder;
 use Mangoit\MediaclipHub\Model\Product as mP;
+use Mangoit\MediaclipHub\Setup\UpgradeSchema as Schema;
 use pwinty\PhpPwinty;
 // 2019-02-24
 final class Pwinty {
@@ -26,7 +27,7 @@ final class Pwinty {
 		/** @var OIC $oiC */
 		$oiC = df_oic()->addFieldToFilter('mediaclip_project_id', ['eq' => $ev['projectId']]);
 		foreach ($oiC as $oi) { /** @var OI $oi */
-			$oi->setItemDownloadStatus(1);
+			$oi[Schema::OI__ITEM_DOWNLOAD_STATUS] = 1;
 			$oi->save();
 		}
 		// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
@@ -34,7 +35,7 @@ final class Pwinty {
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 		$oiC = df_oic()->addFieldToFilter('order_id', ['eq' => $ev->oidI()]);
 		foreach ($oiC as $oi) { /** @var OI $oi */
-			$status[] = $oi->getData('item_download_status');
+			$status[] = $oi[Schema::OI__ITEM_DOWNLOAD_STATUS];
 		}
 		if (!in_array(0, $status)) { // check if all items are downloaded
 			$merchantId = df_o(IScopeConfig::class)->getValue('api/pwinty_api_auth/merchant_id');
