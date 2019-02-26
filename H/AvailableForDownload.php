@@ -6,7 +6,6 @@ use Inkifi\Mediaclip\H\AvailableForDownload\Pwinty;
 use Inkifi\Mediaclip\H\Logger as L;
 use Magento\Catalog\Model\Product;
 use Mangoit\MediaclipHub\Model\Orders as mOrder;
-use Zend\Log\Logger;
 // 2019-02-24
 final class AvailableForDownload {
 	/**
@@ -21,7 +20,7 @@ final class AvailableForDownload {
 	 */
 	private function _p() {
     	$ev = Ev::s(); /** @var Ev $ev */
-    	$l = $this->logger('mediaclip_orders_download_shipment_status');
+    	$l = ikf_logger('mediaclip_orders_download_shipment_status');
 		$l->info($ev->oidE());
 		$l->info($ev->j());
 		//Set mediaclip order status to 1 as the order is downloaded
@@ -40,18 +39,6 @@ final class AvailableForDownload {
 			L::l("Upload folder: $uploadfolder");
 			'pwinty' === $uploadfolder ? Pwinty::p() : Pureprint::p();
 		}
-	}
-
-	/**
-	 * 2019-02-24 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
-	 * @used-by _p()
-	 * @param string $n
-	 * @return Logger
-	 */
-	private function logger($n) {
-        $r = new Logger; /** @var Logger $r */
-        $r->addWriter(new \Zend\Log\Writer\Stream(BP . "/var/log/$n.log"));
-		return $r;
 	}
 
 	/**
