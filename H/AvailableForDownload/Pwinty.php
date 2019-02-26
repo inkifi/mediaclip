@@ -53,29 +53,25 @@ final class Pwinty {
 			// «Modify orders numeration for Mediaclip»
 			// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 			$o = df_order($ev->oidI()); /** @var O $o */
-			$mOrderDetails = mc_h()->getMediaClipOrders($o->getId());
-			foreach ($mOrderDetails->lines as $lines) {
-				$projectDetails[] = ikf_m_project_details($lines->projectId);
-			}
 			$orderDirDate = mc_h()->createOrderDirectoryDate($o->getCreatedAt());
 			$imageArray = [];
 			$catalogue = $pwinty->getCatalogue('GB', 'Pro');
-			foreach ($projectDetails as $value) {
-				$oiC->clear()->getSelect()->reset('where');
-				$salesOrderItem = $oiC->addFieldToFilter('mediaclip_project_id', ['eq' => $value['projectId']]);
-				//get images from downloaded folder
-				foreach ($salesOrderItem as $newvalue) {
-					$orderItemID = $newvalue->getData('item_id');
-				}
+			foreach (mc_h()->getMediaClipOrders($o->getId())->lines as $line) {
+				/** @var array(string => $mixed) $project */
+				$project = ikf_m_project_details($line->projectId);
+				$oi = df_oic()->addFieldToFilter('mediaclip_project_id', ['eq' => $project['projectId']])
+					->getLastItem(); /** @var OI $oi */
 				$dir = df_o(DirectoryList::class);
 				$base = $dir->getRoot();
 				/** @var array(string => mixed) $mP */
-				$mP = df_new_om(mP::class)->load($value['items'][0]['plu'], 'plu')->getData();
+				$mP = df_new_om(mP::class)->load($project['items'][0]['plu'], 'plu')->getData();
 				$pwintyProduct = $mP['pwinty_product_name'];
 				$frameColour = $mP['frame_colour'];
 				$filesUploadPath = df_cc_path(
 					$base, 'mediaclip_orders', $orderDirDate, 'pwinty'
-					,$o->getIncrementId(), $orderItemID, $mP['product_label']
+					,$o->getIncrementId()
+					,$oi->getId()
+					,$mP['product_label']
 				);
 				$imgPath = explode('html/', $filesUploadPath);
 				$storeManager = df_o(IStoreManager::class);
@@ -102,7 +98,7 @@ final class Pwinty {
 									}
 								}
 							}
-							$imageArray[$orderItemID] = $imgAttribute;
+							$imageArray[$oi->getId()] = $imgAttribute;
 							$quantity++;
 						}
 					}
