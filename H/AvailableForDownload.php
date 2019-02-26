@@ -44,15 +44,13 @@ final class AvailableForDownload {
 
 	/**
 	 * 2019-02-24 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
-	 * @used-by pAvailableForDownload()
+	 * @used-by _p()
 	 * @param string $n
 	 * @return Logger
 	 */
 	private function logger($n) {
-		/** @var Logger $r */
-        $writer = new \Zend\Log\Writer\Stream(BP . "/var/log/$n.log");
-        $r = new Logger;
-        $r->addWriter($writer);
+        $r = new Logger; /** @var Logger $r */
+        $r->addWriter(new \Zend\Log\Writer\Stream(BP . "/var/log/$n.log"));
 		return $r;
 	}
 
