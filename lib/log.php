@@ -6,10 +6,10 @@ use Zend\Log\Writer\Stream as W;
  * @used-by \Inkifi\Mediaclip\H\AvailableForDownload::_p()
  * @used-by \Mangoit\MediaclipHub\Controller\Index\OneflowResponse::execute()
  * @used-by \Mangoit\MediaclipHub\Controller\Product\Edit::execute()
- * @used-by \Mangoit\MediaclipHub\Helper\Data::GetTokenForEndUser()
  * @used-by \Mangoit\MediaclipHub\Helper\Data::CheckoutWithSingleProduct()
  * @used-by \Mangoit\MediaclipHub\Helper\Data::consolidateCustomerAndGetCustomerToken()
- * @used-by
+ * @used-by \Mangoit\MediaclipHub\Helper\Data::GetTokenForEndUser()
+ * @used-by \Mangoit\MediaclipHub\Observer\Orderneo::execute()
  * @param string $n
  * @return L
  */
