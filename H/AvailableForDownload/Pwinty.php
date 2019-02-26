@@ -3,12 +3,10 @@ namespace Inkifi\Mediaclip\H\AvailableForDownload;
 use Inkifi\Mediaclip\Event as Ev;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\App\Config\ScopeConfigInterface as IScopeConfig;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Item as OI;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OIC;
 use Magento\Store\Model\StoreManagerInterface as IStoreManager;
-use Mangoit\MediaclipHub\Model\Mediaclip;
 use Mangoit\MediaclipHub\Model\Orders as mOrder;
 use Mangoit\MediaclipHub\Model\Product as mP;
 use Mangoit\MediaclipHub\Setup\UpgradeSchema as Schema;
@@ -61,14 +59,12 @@ final class Pwinty {
 				$project = ikf_m_project_details($line->projectId);
 				$oi = df_oic()->addFieldToFilter('mediaclip_project_id', ['eq' => $project['projectId']])
 					->getLastItem(); /** @var OI $oi */
-				$dir = df_o(DirectoryList::class);
-				$base = $dir->getRoot();
 				/** @var array(string => mixed) $mP */
 				$mP = df_new_om(mP::class)->load($project['items'][0]['plu'], 'plu')->getData();
 				$pwintyProduct = $mP['pwinty_product_name'];
 				$frameColour = $mP['frame_colour'];
 				$filesUploadPath = df_cc_path(
-					$base, 'mediaclip_orders', $orderDirDate, 'pwinty'
+					BP, 'mediaclip_orders', $orderDirDate, 'pwinty'
 					,$o->getIncrementId()
 					,$oi->getId()
 					,$mP['product_label']

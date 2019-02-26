@@ -5,11 +5,9 @@ use Inkifi\Mediaclip\H\Logger as L;
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Model\Customer;
 use Magento\Eav\Api\AttributeSetRepositoryInterface as IAttributeSetRepository;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Item as OI;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OIC;
-use Mangoit\MediaclipHub\Model\Mediaclip;
 use Mangoit\MediaclipHub\Model\Product as mP;
 // 2019-02-24
 final class Pureprint {
@@ -54,8 +52,6 @@ final class Pureprint {
 				$module = $this->mediaclipModuleName($oi->getData('product_id'));
 			}
 			L::l("Module: $module");
-			$dir = df_o(DirectoryList::class);
-			$base = $dir->getRoot();
 			/** @var array(string => mixed) $mP */
 			$mP = df_new_om(mP::class)->load($projectDetails['items'][0]['plu'], 'plu')->getData();
 			L::l('Mediaclip Product:');  L::l($mP);
@@ -66,7 +62,7 @@ final class Pureprint {
 			$includeQuantityInJSON = $mP['include_quantity_in_json'];
 			if ($ftp_json == 1) {
 				$filesUploadPath =
-					$base.'/mediaclip_orders/'.$orderDirDate.'/ascendia/'
+					BP.'/mediaclip_orders/'.$orderDirDate.'/ascendia/'
 					.$orderIncrementId.'/'.$orderItemID.'/'
 					.$mP['product_label']
 				;
