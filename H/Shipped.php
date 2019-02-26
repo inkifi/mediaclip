@@ -6,6 +6,7 @@ use Magento\Eav\Api\AttributeSetRepositoryInterface as IAttributeSetRepository;
 use Magento\Framework\DB\Transaction;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Item as OI;
+use Zend\Log\Logger as zL;
 // 2019-02-24
 final class Shipped {
 	/**
@@ -15,6 +16,7 @@ final class Shipped {
 	static function p() {
     	$ev = Ev::s(); /** @var Ev $ev */
 		$projectId = $ev['projectId'];
+		$l = ikf_logger('mediaclip_orders_shipped_dispactched_status'); /** @var zL $l */
 		try {
 			// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 			// «Modify orders numeration for Mediaclip»
@@ -40,7 +42,7 @@ final class Shipped {
 				}
 			}
 			if (empty($qtys)) {
-				$loggers = $ev->oidE()." No item found to make shipment.";
+				$loggers = "{$ev->oidE()} No item found to make shipment.";
 			}
 			else {
 				/**
@@ -58,26 +60,14 @@ final class Shipped {
 					->save()
 				;
 				$o->setStatus('complete')->save();
-				$loggers = $ev->oidE()." Shipment created successfully ".json_decode($qtys);
+				$loggers = "{$ev->oidE()} Shipment created successfully " . json_decode($qtys);
 			}
-			$writer = new \Zend\Log\Writer\Stream(
-				BP . '/var/log/mediaclip_orders_shipped_dispactched_status.log'
-			);
-			$logger = new \Zend\Log\Logger();
-			$logger->addWriter($writer);
-			$logger->info($loggers);
+			$l->info($loggers);
 		}
 		catch (\Exception $e) {
 			// Log Error On Order Comment History
 			$o->addStatusHistoryComment('Failed to create shipment - '. $e->getMessage())->save();
-			// Error
-			$loggers = $ev->oidE()." Failed to create shipment";
-			$writer = new \Zend\Log\Writer\Stream(
-				BP . '/var/log/mediaclip_orders_shipped_dispactched_status.log'
-			);
-			$logger = new \Zend\Log\Logger();
-			$logger->addWriter($writer);
-			$logger->info($loggers);
+			$l->info("{$ev->oidE()} Failed to create shipment");
 		}		
 	}
 }
