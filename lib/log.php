@@ -6,7 +6,7 @@ use Zend\Log\Writer\Stream as W;
  * @used-by \Inkifi\Mediaclip\H\AvailableForDownload::_p()
  * @used-by \Mangoit\MediaclipHub\Controller\Index\OneflowResponse::execute()
  * @used-by \Mangoit\MediaclipHub\Controller\Product\Edit::execute()
- * @used-by
+ * @used-by \Mangoit\MediaclipHub\Helper\Data::GetTokenForEndUser()
  * @used-by
  * @used-by
  * @used-by
