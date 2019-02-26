@@ -8,7 +8,7 @@ use Zend\Log\Writer\Stream as W;
  * @used-by \Mangoit\MediaclipHub\Controller\Product\Edit::execute()
  * @used-by \Mangoit\MediaclipHub\Helper\Data::GetTokenForEndUser()
  * @used-by \Mangoit\MediaclipHub\Helper\Data::CheckoutWithSingleProduct()
- * @used-by
+ * @used-by \Mangoit\MediaclipHub\Helper\Data::consolidateCustomerAndGetCustomerToken()
  * @used-by
  * @param string $n
  * @return L
