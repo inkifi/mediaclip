@@ -11,6 +11,7 @@ use Mangoit\MediaclipHub\Model\Orders as mOrder;
 use Mangoit\MediaclipHub\Model\Product as mP;
 use Mangoit\MediaclipHub\Setup\UpgradeSchema as Schema;
 use pwinty\PhpPwinty;
+use Zend\Log\Logger as zL;
 // 2019-02-24
 final class Pwinty {
 	/**
@@ -134,10 +135,8 @@ final class Pwinty {
 				"InvoiceMe",     //payment method
 				"Pro"            //quality
 			);
-			$writer = new \Zend\Log\Writer\Stream(BP . '/var/log/pwinty_orders_status.log');
-			$logger = new \Zend\Log\Logger();
-			$logger->addWriter($writer);
-			$logger->info($pOrder);
+			$zl = ikf_logger('pwinty_orders_status'); /** @var zL $zl */
+			$zl->info($pOrder);
 			$pwintyOrderId = $pOrder['id'];
 			//save pwinty id to custom table
 			$mOrderModel = df_new_om(mOrder::class);
@@ -152,19 +151,19 @@ final class Pwinty {
 				$pwintyOrderId, //order id
 				$imageArray
 			);
-			$logger->info($photos);
+			$zl->info($photos);
 			$getOrderStatus = $pwinty->getOrderStatus(// check order status
 				$pwintyOrderId              //orderid
 				 //status
 			);
-			$logger->info($getOrderStatus);
+			$zl->info($getOrderStatus);
 			if ($getOrderStatus['isValid'] == 1) {// submit order if no error
 				$pwinty->updateOrderStatus(
 					$pwintyOrderId,              //orderid
 					"Submitted"         //status
 				);
 			} else {
-				$logger->info('order is not submitted');
+				$zl->info('order is not submitted');
 			}
 		}
 	}
