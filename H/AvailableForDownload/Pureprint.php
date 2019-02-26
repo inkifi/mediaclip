@@ -39,7 +39,7 @@ final class Pureprint {
 		L::l('mediaclipOrderDetails->lines count: ' . count($mOrderDetails->lines));
 		foreach ($mOrderDetails->lines as $lines) {
 			L::l('A line:');  L::l($lines);
-			$projectDetails = ikf_m_project_details($lines->projectId);
+			$projectDetails = ikf_project_details($lines->projectId);
 			L::l('projectDetails:'); L::l($projectDetails);
 			$module = '';
 			$orderQuantity = 1;

@@ -56,7 +56,7 @@ final class Pwinty {
 			$catalogue = $pwinty->getCatalogue('GB', 'Pro');
 			foreach (mc_h()->getMediaClipOrders($o->getId())->lines as $line) {
 				/** @var array(string => $mixed) $project */
-				$project = ikf_m_project_details($line->projectId);
+				$project = ikf_project_details($line->projectId);
 				$oi = df_oic()->addFieldToFilter('mediaclip_project_id', ['eq' => $project['projectId']])
 					->getLastItem(); /** @var OI $oi */
 				/** @var array(string => mixed) $mP */
