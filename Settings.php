@@ -12,7 +12,6 @@ final class Settings extends \Df\Config\Settings {
 	 * @used-by \Inkifi\Mediaclip\API\Client::urlBase()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::CheckoutWithSingleProduct()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::consolidateCustomerAndGetCustomerToken()
-	 * @used-by \Mangoit\MediaclipHub\Helper\Data::getMediaClipOrders()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::getMediaClipProjects()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::GetStoreAuthorizationHeader()
 	 * @param null|string|int|S|Store|array(string, int) $s [optional]
@@ -35,7 +34,6 @@ final class Settings extends \Df\Config\Settings {
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::consolidateCustomerAndGetCustomerToken()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::CreateProject()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::getMediaClipOrderLinesDetails()
-	 * @used-by \Mangoit\MediaclipHub\Helper\Data::getMediaClipOrders()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::getMediaClipProjects()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::GetTokenForEndUser()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::renewMediaClipToken()

@@ -3,7 +3,7 @@ namespace Inkifi\Mediaclip\API\Facade;
 use Magento\Store\Model\Store;
 /**
  * 2019-02-26
- * @used-by ikf_api_order_lines()
+ * @used-by ikf_api_oi()
  * @method static Order s()
  */
 final class Order extends \Df\API\Facade {

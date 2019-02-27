@@ -42,6 +42,12 @@ final class Event extends \Df\API\Document {
 	function oidI() {return dfc($this, function() {return ikf_eti($this->oidE());});}
 
 	/**
+	 * 2019-02-27
+	 * @return string «4a9a1d14-0807-42ab-9a03-e2d54d9b8d12»
+	 */
+	function projectId() {return $this['projectId'];}
+
+	/**
 	 * 2019-02-24
 	 * @used-by \Inkifi\Mediaclip\H\Shipped::p()
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::ev()

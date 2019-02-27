@@ -30,7 +30,6 @@ final class Pureprint {
 		// «Modify orders numeration for Mediaclip»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 		$o = df_order($ev->oidI()); /** @var O $o */
-		$mOrderDetails = mc_h()->getMediaClipOrders($o->getEntityId());
 		$date = mc_h()->createOrderDirectoryDate($o->getCreatedAt()); /** @var string $date */
 		$array = [];
 		foreach (ikf_api_oi($o->getId()) as $mOI) { /** @var mOI $mOI */
@@ -59,7 +58,7 @@ final class Pureprint {
 				L::l("filesUploadPath: $filesUploadPath");
 				$zl->info(json_encode($filesUploadPath));
 				$array['destination']['name'] = 'pureprint';
-				$array['orderData']['sourceOrderId'] = $mOrderDetails->storeData->orderId;
+				$array['orderData']['sourceOrderId'] = $o->getId();
 				$linesDetails = mc_h()->getMediaClipOrderLinesDetails($mOI->id());
 				L::l('linesDetails->files count: ' . count($linesDetails->files));
 if (count($linesDetails->files)) {

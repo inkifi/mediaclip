@@ -3,6 +3,7 @@ use Inkifi\Mediaclip\API\Entity\Order\Item as mOI;
 use Inkifi\Mediaclip\API\Facade\Order as F;
 /**
  * 2019-02-26
+ * https://doc.mediacliphub.com/swagger-ui/index.html#!/orders/getordersOrderId_get_0
  * A response:
  *	[
  *		{
