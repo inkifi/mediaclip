@@ -128,7 +128,7 @@ final class Pureprint {
 			// "Replace the «/home/canvaspr/dev2.inkifi.com/html/ftp_json25june/»
 			// hardcoded filesystem path with a dynamics one":
 			// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/3
-			$contents = json_encode($array,JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT); /** @var string $contents */
+			$contents = json_encode($array, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT); /** @var string $contents */
 			$file = "{$o->getIncrementId()}.json"; /** @var string $file */
 			self::writeLocal($oi, $mP['product_label'], $file, $contents);
 			self::writeRemote($file, $contents);

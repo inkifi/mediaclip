@@ -15,7 +15,6 @@ final class Shipped {
 	 */
 	static function p() {
     	$ev = Ev::s(); /** @var Ev $ev */
-		$projectId = $ev['projectId'];
 		$l = ikf_logger('mediaclip_orders_shipped_dispactched_status'); /** @var zL $l */
 		try {
 			// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
@@ -29,15 +28,12 @@ final class Shipped {
 					$_product = df_new_om(Product::class)->load($_productId);
 					$attributeSet = df_new_om(IAttributeSetRepository::class);
 					$attributeSetRepository = $attributeSet->get($_product->getAttributeSetId());
-					$attribute_set_name = $attributeSetRepository->getAttributeSetName();
-					if ($attribute_set_name == 'Photobook') {
-						if (
-							$oi->getMediaclipProjectId() != ''
-							&& ($oi->getMediaclipProjectId() == $projectId)
-						) {
-							$itemId = $oi->getItemId();
-							$qtys[$itemId] = $oi->getQtyToShip();
-						}
+					if (
+						'Photobook' === $attributeSetRepository->getAttributeSetName()
+						&& $oi->getMediaclipProjectId() === $ev->projectId()
+					) {
+						$itemId = $oi->getItemId();
+						$qtys[$itemId] = $oi->getQtyToShip();
 					}
 				}
 			}
