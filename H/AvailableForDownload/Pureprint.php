@@ -29,7 +29,6 @@ final class Pureprint {
 		// «Modify orders numeration for Mediaclip»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 		$o = df_order($ev->oidI()); /** @var O $o */
-		$date = mc_h()->createOrderDirectoryDate($o->getCreatedAt()); /** @var string $date */
 		$array = [];
 		foreach (ikf_api_oi($o->getId()) as $mOI) { /** @var mOI $mOI */
 			$project = $mOI->project(); /** @var Project $project */
