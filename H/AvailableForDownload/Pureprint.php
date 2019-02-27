@@ -119,10 +119,8 @@ final class Pureprint {
 		$oi = $mOI->oi(); /** @var OI $oi */
 		$module = $this->mediaclipModuleName($oi->getProductId());
 		$mP = $project->mProduct(); /** @var mP $mP */
-		$ftp_json = $mP['ftp_json'];
-		self::zl()->info($ftp_json);
 		$includeQuantityInJSON = $mP['include_quantity_in_json'];
-		if ($ftp_json == 1) {
+		if ($mP->sendJson()) {
 			$array['destination']['name'] = 'pureprint';
 			$array['orderData']['sourceOrderId'] = $o->getId();
 			$linesDetails = mc_h()->getMediaClipOrderLinesDetails($mOI->id());
