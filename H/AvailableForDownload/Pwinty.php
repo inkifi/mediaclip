@@ -28,7 +28,6 @@ final class Pwinty {
 	 */
 	private function _p() {
 		$ev = Ev::s(); /** @var Ev $ev */
-		//set order item status to 1 as response of each line item receives
 		/** @var OIC $oiC */
 		$oiC = df_oic()->addFieldToFilter('mediaclip_project_id', ['eq' => $ev->projectId()]);
 		foreach ($oiC as $oi) { /** @var OI $oi */

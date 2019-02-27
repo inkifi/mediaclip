@@ -24,65 +24,16 @@ final class Pureprint {
 	 */
 	private function _p() {
 		$ev = Ev::s(); /** @var Ev $ev */
-		$zl = ikf_logger('json_status'); /** @var zL $zl */
 		// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 		// «Modify orders numeration for Mediaclip»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
-		$o = df_order($ev->oidI()); /** @var O $o */
+		$o = $ev->o(); /** @var O $o */
 		$array = [];
 		foreach (ikf_api_oi($o->getId()) as $mOI) { /** @var mOI $mOI */
-			$project = $mOI->project(); /** @var Project $project */
-			$oi = df_oic()->addFieldToFilter('mediaclip_project_id', ['eq' => $project->id()])
-				->getLastItem(); /** @var OI $oi */
-			$module = $this->mediaclipModuleName($oi->getProductId());
-			/** @var array(string => mixed) $mP */
-			$mP = df_new_om(mP::class)->load($project['items'][0]['plu'], 'plu')->getData();
-			$ftp_json = $mP['ftp_json'];
-			$zl->info($ftp_json);
-			$includeQuantityInJSON = $mP['include_quantity_in_json'];
-			if ($ftp_json == 1) {
-				$array['destination']['name'] = 'pureprint';
-				$array['orderData']['sourceOrderId'] = $o->getId();
-				$linesDetails = mc_h()->getMediaClipOrderLinesDetails($mOI->id());
-					if (count($linesDetails->files)) {
-						/**
-						* 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
-						* «Generate JSON data for photo-books»
-						* https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
-						* 2018-11-03
-						* An example of $linesDetails->files
-						*	[
-						*		{
-						*			"id": "photobook-jacket",
-						*			"productId": "$(package:inkifi/photobooks)/products/hard-cover-gray-210x210mm-70",
-						*			"plu": "INKIFI-HCB210-M-70",
-						*			"quantity": 1,
-						*			"url": "https://renderstouse.blob.core.windows.net/0c25168e-eda3-41d4-b266-8259566d2507/dust.pdf?sv=2018-03-28&sr=c&sig=XzCB%2B2CWlpqNFqVf6CnoVr8ICDGufTexaNqyzxMDUx8%3D&st=2018-11-02T19%3A36%3A41Z&se=2018-12-02T19%3A38%3A41Z&sp=r",
-						*			"order": 0
-						*		},
-						*		{
-						*			"id": "photobook-pages",
-						*			"productId": "$(package:inkifi/photobooks)/products/hard-cover-gray-210x210mm-70",
-						*			"plu": "INKIFI-HCB210-M-70",
-						*			"quantity": 1,
-						*			"url": "https://renderstouse.blob.core.windows.net/0c25168e-eda3-41d4-b266-8259566d2507/0d0e8542-db8d-475b-95bb-33156dc6551a_0c25168e-eda3-41d4-b266-8259566d2507.pdf?sv=2018-03-28&sr=c&sig=maMnPG2XIrQuLC3mArAgf3YKrM6EzFwNMggwApqMTeo%3D&st=2018-11-02T19%3A36%3A43Z&se=2018-12-02T19%3A38%3A43Z&sp=r",
-						*			"order": 1
-						*		}
-						*	]
-						*/
-						$array['orderData']['items'][] = [
-							'sku' => $mP['plu']
-							,'sourceItemId' => $mOI->id()
-							,'components' => array_values(df_map($linesDetails->files, function($f) use($module, $mP) {return [
-							'code' => dfa($mP, 'json_code', $this->code(dfo($f, 'id'), $module)), 'fetch' => true, 'path' => $f->url
-							];}))
-							,'quantity' => 1 == $includeQuantityInJSON ? (int)$oi->getQtyOrdered() : 1
-						];
-					}
-			}
+			$this->pOI($mOI);			
 		}
 		if (!empty($array)) {
-			$zl->info(json_encode($array));
+			self::zl()->info(json_encode($array));
 			$shippingMethod = $o->getShippingMethod();
 			$address = $o->getShippingAddress();
 			$postcode = $address->getPostcode();
@@ -159,6 +110,62 @@ final class Pureprint {
     }
 
 	/**
+	 * 2019-02-27
+	 * @param mOI $mOI
+	 * @used-by _p()
+	 */
+    private function pOI(mOI $mOI) {
+		$project = $mOI->project(); /** @var Project $project */
+		$oi = $mOI->oi(); /** @var OI $oi */
+		$module = $this->mediaclipModuleName($oi->getProductId());
+		/** @var array(string => mixed) $mP */
+		$mP = df_new_om(mP::class)->load($project['items'][0]['plu'], 'plu')->getData();
+		$ftp_json = $mP['ftp_json'];
+		self::zl()->info($ftp_json);
+		$includeQuantityInJSON = $mP['include_quantity_in_json'];
+		if ($ftp_json == 1) {
+			$array['destination']['name'] = 'pureprint';
+			$array['orderData']['sourceOrderId'] = $o->getId();
+			$linesDetails = mc_h()->getMediaClipOrderLinesDetails($mOI->id());
+				if (count($linesDetails->files)) {
+					/**
+					* 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+					* «Generate JSON data for photo-books»
+					* https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
+					* 2018-11-03
+					* An example of $linesDetails->files
+					*	[
+					*		{
+					*			"id": "photobook-jacket",
+					*			"productId": "$(package:inkifi/photobooks)/products/hard-cover-gray-210x210mm-70",
+					*			"plu": "INKIFI-HCB210-M-70",
+					*			"quantity": 1,
+					*			"url": "https://renderstouse.blob.core.windows.net/0c25168e-eda3-41d4-b266-8259566d2507/dust.pdf?sv=2018-03-28&sr=c&sig=XzCB%2B2CWlpqNFqVf6CnoVr8ICDGufTexaNqyzxMDUx8%3D&st=2018-11-02T19%3A36%3A41Z&se=2018-12-02T19%3A38%3A41Z&sp=r",
+					*			"order": 0
+					*		},
+					*		{
+					*			"id": "photobook-pages",
+					*			"productId": "$(package:inkifi/photobooks)/products/hard-cover-gray-210x210mm-70",
+					*			"plu": "INKIFI-HCB210-M-70",
+					*			"quantity": 1,
+					*			"url": "https://renderstouse.blob.core.windows.net/0c25168e-eda3-41d4-b266-8259566d2507/0d0e8542-db8d-475b-95bb-33156dc6551a_0c25168e-eda3-41d4-b266-8259566d2507.pdf?sv=2018-03-28&sr=c&sig=maMnPG2XIrQuLC3mArAgf3YKrM6EzFwNMggwApqMTeo%3D&st=2018-11-02T19%3A36%3A43Z&se=2018-12-02T19%3A38%3A43Z&sp=r",
+					*			"order": 1
+					*		}
+					*	]
+					*/
+					$array['orderData']['items'][] = [
+						'sku' => $mP['plu']
+						,'sourceItemId' => $mOI->id()
+						,'components' => array_values(df_map($linesDetails->files, function($f) use($module, $mP) {return [
+						'code' => dfa($mP, 'json_code', $this->code(dfo($f, 'id'), $module)), 'fetch' => true, 'path' => $f->url
+						];}))
+						,'quantity' => 1 == $includeQuantityInJSON ? (int)$oi->getQtyOrdered() : 1
+					];
+				}
+		}
+	}
+
+	/**
 	 * 2019-02-24
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload::_p()
 	 */
@@ -200,4 +207,12 @@ final class Pureprint {
 		df_sftp()->write("/Inkifi/$file", $contents);
 		df_sftp()->close();
 	}
+
+	/**
+	 * 2019-02-27
+	 * @used-by _p()
+	 * @used-by pOI()
+	 * @return zL
+	 */
+	private static function zl() {return dfcf(function() {return ikf_logger('json_status');});}
 }

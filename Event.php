@@ -1,5 +1,6 @@
 <?php
 namespace Inkifi\Mediaclip;
+use Magento\Sales\Model\Order as O;
 /**
  * 2018-08-16
  * 2019-02-24
@@ -24,6 +25,13 @@ namespace Inkifi\Mediaclip;
  */
 final class Event extends \Df\API\Document {
 	/**
+	 * 2019-02-27
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::_p()
+	 * @return O
+	 */
+	function o() {return dfc($this, function() {return df_order($this->oidI());});}
+
+	/**
 	 * 2019-02-24
 	 * @used-by oidI()
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::pAvailableForDownload()
@@ -34,6 +42,7 @@ final class Event extends \Df\API\Document {
 
 	/**
 	 * 2019-02-24
+	 * @used-by o()
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::l()
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::pAvailableForDownload()
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::pShipped()
