@@ -119,7 +119,6 @@ final class Pureprint {
 		$oi = $mOI->oi(); /** @var OI $oi */
 		$module = $this->mediaclipModuleName($oi->getProductId());
 		$mP = $project->mProduct(); /** @var mP $mP */
-		$includeQuantityInJSON = $mP['include_quantity_in_json'];
 		if ($mP->sendJson()) {
 			$array['destination']['name'] = 'pureprint';
 			$array['orderData']['sourceOrderId'] = $o->getId();
@@ -158,7 +157,7 @@ final class Pureprint {
 						,'fetch' => true
 						,'path' => $f->url
 						];}))
-						,'quantity' => 1 == $includeQuantityInJSON ? (int)$oi->getQtyOrdered() : 1
+						,'quantity' => $mP->includeQuantityInJson() ? (int)$oi->getQtyOrdered() : 1
 					];
 				}
 		}
