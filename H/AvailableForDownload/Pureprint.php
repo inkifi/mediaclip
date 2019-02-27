@@ -118,8 +118,7 @@ final class Pureprint {
 		$project = $mOI->project(); /** @var Project $project */
 		$oi = $mOI->oi(); /** @var OI $oi */
 		$module = $this->mediaclipModuleName($oi->getProductId());
-		/** @var array(string => mixed) $mP */
-		$mP = df_new_om(mP::class)->load($project['items'][0]['plu'], 'plu')->getData();
+		$mP = $project->mProduct(); /** @var mP $mP */
 		$ftp_json = $mP['ftp_json'];
 		self::zl()->info($ftp_json);
 		$includeQuantityInJSON = $mP['include_quantity_in_json'];
@@ -157,7 +156,9 @@ final class Pureprint {
 						'sku' => $mP['plu']
 						,'sourceItemId' => $mOI->id()
 						,'components' => array_values(df_map($linesDetails->files, function($f) use($module, $mP) {return [
-						'code' => dfa($mP, 'json_code', $this->code(dfo($f, 'id'), $module)), 'fetch' => true, 'path' => $f->url
+						'code' => $mP['json_code'] ?: $this->code(dfo($f, 'id'), $module)
+						,'fetch' => true
+						,'path' => $f->url
 						];}))
 						,'quantity' => 1 == $includeQuantityInJSON ? (int)$oi->getQtyOrdered() : 1
 					];

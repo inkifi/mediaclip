@@ -1,5 +1,6 @@
 <?php
 namespace Inkifi\Mediaclip\API\Entity;
+use Mangoit\MediaclipHub\Model\Product as mP;
 /**
  * 2019-02-26
  * A data item:
@@ -32,4 +33,14 @@ final class Project extends \Df\API\Document {
 	 * @return string «f113e39c-ccc9-4dec-bc38-a5825493647e»
 	 */
 	function id() {return $this['projectId'];}
+
+	/**
+	 * 2019-02-27
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
+	 * @return mP
+	 */
+	function mProduct() {return dfc($this, function() {
+		$r = df_new_om(mP::class); /** @var mP $r */
+		return $r->load($this['items'][0]['plu'], 'plu');
+	});}
 }
