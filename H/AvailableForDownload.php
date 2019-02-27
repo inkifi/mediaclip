@@ -5,6 +5,7 @@ use Inkifi\Mediaclip\H\AvailableForDownload\Pureprint;
 use Inkifi\Mediaclip\H\AvailableForDownload\Pwinty;
 use Inkifi\Mediaclip\H\Logger as L;
 use Magento\Catalog\Model\Product;
+use Magento\Sales\Model\Order\Item as OI;
 use Mangoit\MediaclipHub\Model\Orders as mOrder;
 use Zend\Log\Logger as zL;
 // 2019-02-24
@@ -41,6 +42,20 @@ final class AvailableForDownload {
 			'pwinty' === $uploadfolder ? Pwinty::p() : Pureprint::p();
 		}
 	}
+
+	/**
+	 * 2019-02-27
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::_p()
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pwinty::_p()
+	 * @param OI $oi
+	 * @param string $printer
+	 * @param string $product
+	 * @return string
+	 */
+	static function path(OI $oi, $printer, $product) {$o = $oi->getOrder(); return df_cc_path(
+		BP, 'mediaclip_orders', mc_h()->createOrderDirectoryDate($o->getCreatedAt())
+		,$printer, $o->getIncrementId(), $oi->getId(), $product
+	);}
 
 	/**
 	 * 2019-02-24
