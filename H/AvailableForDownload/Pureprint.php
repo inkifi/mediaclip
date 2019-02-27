@@ -34,7 +34,7 @@ final class Pureprint {
 			$project = $mOI->project(); /** @var Project $project */
 			$oi = df_oic()->addFieldToFilter('mediaclip_project_id', ['eq' => $project->id()])
 				->getLastItem(); /** @var OI $oi */
-			$module = $this->mediaclipModuleName($oi->getData('product_id'));
+			$module = $this->mediaclipModuleName($oi->getProductId());
 			/** @var array(string => mixed) $mP */
 			$mP = df_new_om(mP::class)->load($project['items'][0]['plu'], 'plu')->getData();
 			$ftp_json = $mP['ftp_json'];
