@@ -104,7 +104,6 @@ final class Pureprint {
 		$project = $mOI->project(); /** @var Project $project */
 		$mP = $project->mProduct(); /** @var mP $mP */
 		if ($mP->sendJson()) {
-			$oi = $mOI->oi(); /** @var OI $oi */
 			$linesDetails = mc_h()->getMediaClipOrderLinesDetails($mOI->id());
 			if (count($linesDetails->files)) {
 				/**
@@ -132,6 +131,7 @@ final class Pureprint {
 				*		}
 				*	]
 				*/
+				$oi = $mOI->oi(); /** @var OI $oi */
 				/** @var string $mod */
 				$mod = df_attribute_set(df_product($oi->getProductId()))->getAttributeSetName();
 				$array['orderData']['items'][] = [
