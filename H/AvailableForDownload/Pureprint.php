@@ -3,8 +3,6 @@ namespace Inkifi\Mediaclip\H\AvailableForDownload;
 use Inkifi\Mediaclip\API\Entity\Order\Item as mOI;
 use Inkifi\Mediaclip\API\Entity\Project;
 use Inkifi\Mediaclip\Event as Ev;
-use Inkifi\Mediaclip\H\AvailableForDownload as AFD;
-use Inkifi\Mediaclip\H\Logger as L;
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Model\Customer;
 use Magento\Eav\Api\AttributeSetRepositoryInterface as IAttributeSetRepository;

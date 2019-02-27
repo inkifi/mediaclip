@@ -44,20 +44,6 @@ final class AvailableForDownload {
 	}
 
 	/**
-	 * 2019-02-27
-	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::_p()
-	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pwinty::_p()
-	 * @param OI $oi
-	 * @param string $printer
-	 * @param string $product
-	 * @return string
-	 */
-	static function path(OI $oi, $printer, $product) {$o = $oi->getOrder(); return df_cc_path(
-		BP, 'mediaclip_orders', mc_h()->createOrderDirectoryDate($o->getCreatedAt())
-		,$printer, $o->getIncrementId(), $oi->getId(), $product
-	);}
-
-	/**
 	 * 2019-02-24
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::execute()
 	 */

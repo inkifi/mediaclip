@@ -3,7 +3,6 @@ namespace Inkifi\Mediaclip\H\AvailableForDownload;
 use Inkifi\Mediaclip\API\Entity\Order\Item as mOI;
 use Inkifi\Mediaclip\API\Entity\Project;
 use Inkifi\Mediaclip\Event as Ev;
-use Inkifi\Mediaclip\H\AvailableForDownload as AFD;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\App\Config\ScopeConfigInterface as IScopeConfig;
 use Magento\Sales\Model\Order as O;
@@ -31,7 +30,7 @@ final class Pwinty {
 		$ev = Ev::s(); /** @var Ev $ev */
 		//set order item status to 1 as response of each line item receives
 		/** @var OIC $oiC */
-		$oiC = df_oic()->addFieldToFilter('mediaclip_project_id', ['eq' => $ev['projectId']]);
+		$oiC = df_oic()->addFieldToFilter('mediaclip_project_id', ['eq' => $ev->projectId()]);
 		foreach ($oiC as $oi) { /** @var OI $oi */
 			$oi[Schema::OI__ITEM_DOWNLOAD_STATUS] = 1;
 			$oi->save();
@@ -65,7 +64,8 @@ final class Pwinty {
 				$mP = df_new_om(mP::class)->load($project['items'][0]['plu'], 'plu')->getData();
 				$pwintyProduct = $mP['pwinty_product_name'];
 				$frameColour = $mP['frame_colour'];
-				$filesUploadPath = AFD::path($oi, 'pwinty', $mP['product_label']);
+				// 2019-02-27 TODO
+				$filesUploadPath = '';//AFD::path($oi, 'pwinty', $mP['product_label']);
 				$imgPath = explode('html/', $filesUploadPath);
 				$storeManager = df_o(IStoreManager::class);
 				$store = $storeManager->getStore();
