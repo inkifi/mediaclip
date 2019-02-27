@@ -34,7 +34,6 @@ final class Pureprint {
 			$project = $mOI->project(); /** @var Project $project */
 			$oi = df_oic()->addFieldToFilter('mediaclip_project_id', ['eq' => $project->id()])
 				->getLastItem(); /** @var OI $oi */
-			$orderQuantity = (int)$oi->getQtyOrdered();
 			$module = $this->mediaclipModuleName($oi->getData('product_id'));
 			/** @var array(string => mixed) $mP */
 			$mP = df_new_om(mP::class)->load($project['items'][0]['plu'], 'plu')->getData();
@@ -77,7 +76,7 @@ final class Pureprint {
 							,'components' => array_values(df_map($linesDetails->files, function($f) use($module, $mP) {return [
 							'code' => dfa($mP, 'json_code', $this->code(dfo($f, 'id'), $module)), 'fetch' => true, 'path' => $f->url
 							];}))
-							,'quantity' => 1 == $includeQuantityInJSON ? $orderQuantity : 1
+							,'quantity' => 1 == $includeQuantityInJSON ? (int)$oi->getQtyOrdered() : 1
 						];
 					}
 			}
