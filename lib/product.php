@@ -1,6 +1,7 @@
 <?php
 use Magento\Catalog\Model\Product as P;
 use Mangoit\MediaclipHub\Model\Product as mP;
+use Mangoit\MediaclipHub\Model\ResourceModel\Product\Collection as mPC;
 /**
  * 2019-03-04
  * A result:
@@ -29,3 +30,12 @@ function ikf_product($p) {
 	$r->loadByPlu($p instanceof P ? $p['mediaclip_print_product'] : $p);
 	return $r;
 }
+
+/**
+ * 2019-03-04
+ * @used-by \Mangoit\MediaclipHub\Controller\Product\Edit::getMediaclipProductData()
+ * @used-by \Mangoit\MediaclipHub\Helper\Data::getMediaClipProductName()
+ * @used-by \Mangoit\MediaclipHub\Model\Product::getMediaClipProductBySku()
+ * @return mPC
+ */
+function ikf_product_c() {return df_new_om(mPC::class);}
