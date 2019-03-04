@@ -134,7 +134,7 @@ final class Pureprint {
 				/** @var string $mod */
 				$mod = df_attribute_set(df_product($oi->getProductId()))->getAttributeSetName();
 				$array['orderData']['items'][] = [
-					'sku' => $mP['plu']
+					'sku' => $mP->plu()
 					,'sourceItemId' => $mOI->id()
 					,'components' => array_values(df_map($linesDetails->files, function($f) use($mod, $mP) {return [
 					'code' => $mP['json_code'] ?: $this->code(dfo($f, 'id'), $mod)

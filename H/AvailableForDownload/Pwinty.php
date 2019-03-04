@@ -59,8 +59,7 @@ final class Pwinty {
 				$project = $mOI->project(); /** @var Project $project */
 				$oi = df_oic()->addFieldToFilter('mediaclip_project_id', ['eq' => $project->id()])
 					->getLastItem(); /** @var OI $oi */
-				/** @var array(string => mixed) $mP */
-				$mP = df_new_om(mP::class)->load($project['items'][0]['plu'], 'plu')->getData();
+				$mP = $mOI->mProduct(); /** @var mP $mP */
 				$pwintyProduct = $mP['pwinty_product_name'];
 				$frameColour = $mP['frame_colour'];
 				// 2019-02-27 TODO

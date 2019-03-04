@@ -59,6 +59,8 @@ final class Item extends \Df\API\Document {
 	 *		"pwinty_product_name": null,
 	 *		"updated_at": "2018-03-16 06:06:24"
 	 *	}
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pwinty::_p()
 	 * @return mP
 	 */
 	function mProduct() {return dfc($this, function() {return ikf_product($this->product());});}
