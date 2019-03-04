@@ -5,6 +5,12 @@ use Zend_Http_Client as C;
 // 2019-01-11
 final class Client extends \Df\API\Client {
 	/**
+	 * 2019-03-04
+	 * @used-by \Inkifi\Mediaclip\API\Facade\Order\Item::adjustClient()
+	 */
+	function skipStore() {$this->_skipStore = true;}
+
+	/**
 	 * 2019-01-12
 	 * @override
 	 * @see \Df\API\Client::_construct()
@@ -43,7 +49,20 @@ final class Client extends \Df\API\Client {
 	 * @used-by \Df\API\Client::url()
 	 * @return string
 	 */
-	protected function urlBase() {return "https://api.mediacliphub.com/stores/{$this->s()->id()}";}
+	protected function urlBase() {return df_cc_path(
+		/**
+		 * 2019-03-04
+		 * The Mediaclip documentation contains a wrong information
+		 * about the «Order line information» request URL:
+		 * https://doc.mediacliphub.com/pages/Api/orderLineInformation.html
+		 * It says that the URL shuld be:
+		 * 		https://api.mediacliphub.com/stores/{YOUR-STORE-ID}/orders/{YOUR-STORE-ORDER-ID}/lines/{YOUR-STORE-LINE-NUMBER}
+		 * But really it should be:
+		 * 		https://api.mediacliphub.com/lines/{YOUR-STORE-LINE-NUMBER}
+		 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/blob/52cb5320/Helper/Data.php#L1181
+		 */
+		'https://api.mediacliphub.com', $this->_skipStore ? null : "/stores/{$this->s()->id()}"
+	);}
 
 	/**          
 	 * 2019-01-12
@@ -52,4 +71,12 @@ final class Client extends \Df\API\Client {
 	 * @return S
 	 */
 	private function s() {return dfc($this, function() {return S::s($this->store());});}
+
+	/**
+	 * 2019-03-04
+	 * @used-by skipStore()
+	 * @used-by urlBase()
+	 * @var bool
+	 */
+	private $_skipStore;
 }

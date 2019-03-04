@@ -3,6 +3,7 @@ namespace Inkifi\Mediaclip\T;
 /**
  * 2019-01-11
  * @see \Inkifi\Mediaclip\T\CaseT\Order
+ * @see \Inkifi\Mediaclip\T\CaseT\Order\Item
  * @see \Inkifi\Mediaclip\T\CaseT\Product
  * @see \Inkifi\Mediaclip\T\CaseT\Projects
  */

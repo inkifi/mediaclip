@@ -1,7 +1,6 @@
 <?php
 namespace Inkifi\Mediaclip\H\AvailableForDownload;
 use Inkifi\Mediaclip\API\Entity\Order\Item as mOI;
-use Inkifi\Mediaclip\API\Entity\Project;
 use Inkifi\Mediaclip\Event as Ev;
 use Magento\Customer\Model\Customer;
 use Magento\Sales\Model\Order as O;
