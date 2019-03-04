@@ -3,11 +3,11 @@ namespace Inkifi\Mediaclip\T\CaseT;
 use Inkifi\Mediaclip\API\Facade\Order as F;
 // 2019-02-26
 final class Order extends \Inkifi\Mediaclip\T\CaseT {
-	/** 2019-02-26 */
+	/** @test 2019-02-26 */
 	function t00() {}
 
 	/**
-	 * @test 2019-02-26
+	 * 2019-02-26
 	 * A response:
 	 * {
 	 *		"dateCreatedUtc": "2019-02-20T14:00:19.9430000",
