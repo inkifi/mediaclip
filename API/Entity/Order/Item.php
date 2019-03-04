@@ -5,6 +5,7 @@ use Magento\Catalog\Model\Product as P;
 use Magento\Sales\Model\Order\Item as OI;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OIC;
 use Mangoit\MediaclipHub\Model\Mediaclip;
+use Mangoit\MediaclipHub\Model\Product as mP;
 /**
  * 2019-02-26
  * A data item:
@@ -40,6 +41,29 @@ final class Item extends \Df\API\Document {
 	function isAvailableForDownload() {return 'AvailableForDownload' === $this['status/value'];}
 
 	/**
+	 * 2019-03-04
+	 * A result:
+	 * {
+	 *		"created_at": "2017-09-21 04:54:52",
+	 *		"dust_jacket_popup": null,
+	 *		"frame_colour": null,
+	 *		"ftp_json": "1",
+	 *		"id": "8",
+	 *		"include_quantity_in_json": "0",
+	 *		"json_code": null,
+	 *		"module": "3",
+ 	 *		"plu": "INKIFI-VP",
+ 	 *		"product_id": "$(package:inkifi/prints)/products/vintage-polaroids",
+	 *		"product_label": "Vintage Prints Web",
+	 *		"product_theme": null,
+	 *		"pwinty_product_name": null,
+	 *		"updated_at": "2018-03-16 06:06:24"
+	 *	}
+	 * @return mP
+	 */
+	function mProduct() {return dfc($this, function() {return ikf_product($this->product());});}
+
+	/**
 	 * 2019-02-27
 	 * `return df_oi($this->projectId(), 'mediaclip_project_id')` does not work correctly here
 	 * due to a stupid software architecture implemented by a previous (Indian) developer:
@@ -67,6 +91,7 @@ final class Item extends \Df\API\Document {
 
 	/**
 	 * 2019-02-26
+	 * @used-by productM()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::downloadAndUploadOrderFilesToServer()
 	 * @return P
 	 */
@@ -96,7 +121,6 @@ final class Item extends \Df\API\Document {
 	 *			}
 	 *		]
 	 *	}
-	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::_p()
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pwinty::_p()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::downloadAndUploadOrderFilesToServer()
 	 * @return Project

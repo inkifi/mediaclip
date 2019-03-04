@@ -101,8 +101,7 @@ final class Pureprint {
 	 * @used-by _p()
 	 */
     private function pOI(mOI $mOI) {
-		$project = $mOI->project(); /** @var Project $project */
-		$mP = $project->mProduct(); /** @var mP $mP */
+		$mP = $mOI->mProduct(); /** @var mP $mP */
 		if ($mP->sendJson()) {
 			$linesDetails = mc_h()->getMediaClipOrderLinesDetails($mOI->id());
 			if (count($linesDetails->files)) {
