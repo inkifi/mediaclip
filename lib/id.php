@@ -10,9 +10,9 @@ use Magento\Store\Model\Store;
  * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::execute()
  * @used-by \Mangoit\MediaclipHub\Controller\Index\PwintyOrderStatusUpdate::execute()
  * @param string $v
- * @return string
+ * @return int
  */
-function ikf_eti($v) {return df_last(explode('-', $v));}
+function ikf_eti($v) {return intval(df_last(explode('-', $v)));}
 
 /**
  * 2018-08-16

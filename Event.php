@@ -81,7 +81,7 @@ final class Event extends \Df\API\Document {
 	 * @used-by oidI()
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::pAvailableForDownload()
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::pShipped()
-	 * @return string
+	 * @return string	«58312» or «staging-58312»
 	 */
 	function oidE() {return dfc($this, function() {return $this['order/storeData/orderId'];});}
 
@@ -91,7 +91,7 @@ final class Event extends \Df\API\Document {
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::l()
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::pAvailableForDownload()
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::pShipped()
-	 * @return string
+	 * @return int	«58312»
 	 */
 	function oidI() {return dfc($this, function() {return ikf_eti($this->oidE());});}
 
@@ -99,7 +99,7 @@ final class Event extends \Df\API\Document {
 	 * 2019-02-27
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pwinty::_p()
 	 * @used-by \Inkifi\Mediaclip\H\Shipped::p()
-	 * @return string «4a9a1d14-0807-42ab-9a03-e2d54d9b8d12»
+	 * @return string	«4a9a1d14-0807-42ab-9a03-e2d54d9b8d12»
 	 */
 	function projectId() {return $this['projectId'];}
 

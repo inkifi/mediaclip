@@ -26,6 +26,17 @@ final class Pureprint {
 		// «Modify orders numeration for Mediaclip»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 		$o = $ev->o(); /** @var O $o */
+		/**
+		 * 2019-03-13
+		 * I have ported this algorithm from the previous implementation,
+		 * but it seems to be wrong,
+		 * because the current `AvailableForDownload` event is related to a particular order item only,
+		 * not to all items of the current order:
+		 * «Mediaclip sends separate notifications for each order item.
+		 * It is a "per order line" update, meaning that if your order contains three lines,
+		 * you will receive an update message for each individual line.»
+		 * https://doc.mediacliphub.com/pages/Store%20endpoints/statusUpdateEndpoint.html
+		 */
 		$mItems = ikf_api_oi($o->getId()); /** @var mOI[] $mItems */
 		if ($items = df_map($mItems, function(mOI $mOI) {return $this->pOI($mOI);})) {
 			/** @var array(array(string => mixed)) $items */
