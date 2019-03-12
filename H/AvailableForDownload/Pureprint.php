@@ -135,7 +135,7 @@ final class Pureprint {
 				'sku' => $mP->plu()
 				,'sourceItemId' => $mOI->id()
 				,'components' => array_values(df_map($files, function(F $f) use($mod, $mP) {return [
-					'code' => $mP['json_code'] ?: $this->code($f, $mod)
+					'code' => $mP->jsonCode() ?: $this->code($f, $mod)
 					,'fetch' => true
 					,'path' => $f->url()
 				];}))
