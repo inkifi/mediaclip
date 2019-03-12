@@ -36,6 +36,7 @@ final class Pureprint {
 		 * It is a "per order line" update, meaning that if your order contains three lines,
 		 * you will receive an update message for each individual line.»
 		 * https://doc.mediacliphub.com/pages/Store%20endpoints/statusUpdateEndpoint.html
+		 * In a right implementation we would use @see \Inkifi\Mediaclip\Event::oi()
 		 */
 		$mItems = ikf_api_oi($o->getId()); /** @var mOI[] $mItems */
 		if ($items = df_map($mItems, function(mOI $mOI) {return $this->pOI($mOI);})) {
