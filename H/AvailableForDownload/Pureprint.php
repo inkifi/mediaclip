@@ -28,7 +28,7 @@ final class Pureprint {
 		$o = $ev->o(); /** @var O $o */
 		/**
 		 * 2019-03-13
-		 * I have ported this algorithm from the previous implementation,
+		 * 1) I have ported this algorithm from the previous implementation,
 		 * but it seems to be wrong,
 		 * because the current `AvailableForDownload` event is related to a particular order item only,
 		 * not to all items of the current order:
@@ -36,7 +36,11 @@ final class Pureprint {
 		 * It is a "per order line" update, meaning that if your order contains three lines,
 		 * you will receive an update message for each individual line.»
 		 * https://doc.mediacliphub.com/pages/Store%20endpoints/statusUpdateEndpoint.html
-		 * In a right implementation we would use @see \Inkifi\Mediaclip\Event::oi()
+		 * 2) In a right implementation we would use @see \Inkifi\Mediaclip\Event::oi()
+		 * 3) The problem is only exists for Pureprint.
+		 * It does not exist for Pwinty because the Pwinty's handler
+		 * uses the @see \Mangoit\MediaclipHub\Setup\UpgradeSchema::OI__ITEM_DOWNLOAD_STATUS flag
+		 * and it passes an order to Pwinty only when ALL order items have the flag set.
 		 */
 		$mItems = ikf_api_oi($o->getId()); /** @var mOI[] $mItems */
 		if ($items = df_map($mItems, function(mOI $mOI) {return $this->pOI($mOI);})) {
