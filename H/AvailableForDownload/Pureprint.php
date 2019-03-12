@@ -26,56 +26,23 @@ final class Pureprint {
 		// «Modify orders numeration for Mediaclip»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 		$o = $ev->o(); /** @var O $o */
-		if ($items = df_map(ikf_api_oi($o->getId()), function(mOI $mOI) {return $this->pOI($mOI);})) {
+		$mItems = ikf_api_oi($o->getId()); /** @var mOI[] $mItems */
+		if ($items = df_map($mItems, function(mOI $mOI) {return $this->pOI($mOI);})) {
 			/** @var array(array(string => mixed)) $items */
-			$array['orderData']['items'] = $items;
-			$array['destination']['name'] = 'pureprint';
-			$array['orderData']['sourceOrderId'] = $o->getId();
-			self::zl()->info(json_encode($array));
-			$shippingMethod = $o->getShippingMethod();
-			$address = $o->getShippingAddress();
-			$postcode = $address->getPostcode();
-			$countryCode = $address->getCountryId();
-			$region = $address->getRegion();
-			$telephone = $address->getTelephone();
-			if ($address->getCompany() != '') {
-				$street1 = $address->getCompany() . ',' . $address->getStreet()[0];
-			}
-			else {
-				$street1 = $address->getStreet()[0];
-			}
-			if (isset($address->getStreet()[1])) {
-				$street2 = $address->getStreet()[1];
-			}
-			else {
-				$street2 = '';
-			}
-			$city = $address->getCity();
-			$customerId = $o->getCustomerId();
-			$customer = df_new_om(Customer::class)->load($customerId);
-			$name = $address->getFirstname().' '.$address->getLastname();
-			$email = $customer['email'];
-			$array['shipments'] = [[
-			   'shipTo' => [
-					'name' => $name
-					,'address1'=> $street1
-					,'address2' => $street2
-					,'town' => $city
-					,'postcode' => $postcode
-					,'isoCountry' => $countryCode
-					,'state' => $region
-					,'email' => $email
-					,'phone' => $telephone
-			   ],
-			   'carrier' => ['alias' => $shippingMethod]
-			]];
+			$d = [
+				'destination' => ['name' => 'pureprint']
+				,'orderData' => ['items' => $items, 'sourceOrderId' => $o->getId()]
+				,'shipments' => [$this->pShipment($o)]
+			]; /** @var array(string => array(mixed)) $d */
+			self::zl()->info(json_encode($d));
 			// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 			// "Replace the «/home/canvaspr/dev2.inkifi.com/html/ftp_json25june/»
 			// hardcoded filesystem path with a dynamics one":
 			// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/3
-			$contents = json_encode($array, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT); /** @var string $contents */
+			$contents = json_encode($d, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT); /** @var string $contents */
 			$file = "{$o->getIncrementId()}.json"; /** @var string $file */
-			self::writeLocal($oi, $mP['product_label'], $file, $contents);
+			$mOI = df_first($mItems); /** @var mOI $mOI */
+			self::writeLocal($mOI->oi(), $mOI->mProduct()->label(), $file, $contents);
 			self::writeRemote($file, $contents);
 		}
 	}
@@ -84,7 +51,7 @@ final class Pureprint {
 	 * 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 	 * «Generate JSON data for photo-books»: https://www.upwork.com/ab/f/contracts/21011549
 	 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
-	 * @used-by _p()
+	 * @used-by pOI()
 	 * @param F $f
 	 * @param string $m
 	 * @return string
@@ -143,6 +110,52 @@ final class Pureprint {
 			];
 		}
 		return $r;
+	}
+
+	/**
+	 * 2019-03-12
+	 * @used-by _p()
+	 * @param O $o
+	 * @return array(string => mixed)
+	 */
+	function pShipment(O $o) {
+		$shippingMethod = $o->getShippingMethod();
+		$address = $o->getShippingAddress();
+		$postcode = $address->getPostcode();
+		$countryCode = $address->getCountryId();
+		$region = $address->getRegion();
+		$telephone = $address->getTelephone();
+		if ($address->getCompany() != '') {
+			$street1 = $address->getCompany() . ',' . $address->getStreet()[0];
+		}
+		else {
+			$street1 = $address->getStreet()[0];
+		}
+		if (isset($address->getStreet()[1])) {
+			$street2 = $address->getStreet()[1];
+		}
+		else {
+			$street2 = '';
+		}
+		$city = $address->getCity();
+		$customerId = $o->getCustomerId();
+		$customer = df_new_om(Customer::class)->load($customerId);
+		$name = $address->getFirstname().' '.$address->getLastname();
+		$email = $customer['email'];
+		return [
+		   'shipTo' => [
+				'name' => $name
+				,'address1'=> $street1
+				,'address2' => $street2
+				,'town' => $city
+				,'postcode' => $postcode
+				,'isoCountry' => $countryCode
+				,'state' => $region
+				,'email' => $email
+				,'phone' => $telephone
+		   ],
+		   'carrier' => ['alias' => $shippingMethod]
+		];
 	}
 
 	/**
