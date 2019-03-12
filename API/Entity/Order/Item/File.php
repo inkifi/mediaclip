@@ -23,4 +23,17 @@ namespace Inkifi\Mediaclip\API\Entity\Order\Item;
  *		}
  * @used-by \Inkifi\Mediaclip\API\Facade\Order\Item::files()
  */
-final class File extends \Df\API\Document {}
+final class File extends \Df\API\Document {
+	/**
+	 * 2019-03-12
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::code()
+	 * @return string|null	«photobook-pages»
+	 */
+	function id() {return $this['id'];}
+
+	/**
+	 * 2019-03-12
+	 * @return string	«https://renderstouse.blob.core.windows.net/0c25168e-eda3-41d4-b266-8259566d2507/0d0e8542-db8d-475b-95bb-33156dc6551a_0c25168e-eda3-41d4-b266-8259566d2507.pdf?sv=2018-03-28&sr=c&sig=maMnPG2XIrQuLC3mArAgf3YKrM6EzFwNMggwApqMTeo%3D&st=2018-11-02T19%3A36%3A43Z&se=2018-12-02T19%3A38%3A43Z&sp=r»
+	 */
+	function url() {return $this['url'];}
+}

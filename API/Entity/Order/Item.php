@@ -30,6 +30,7 @@ use Mangoit\MediaclipHub\Model\Product as mP;
 final class Item extends \Df\API\Document {
 	/**
 	 * 2019-03-04
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
 	 * @used-by \Inkifi\Mediaclip\T\CaseT\Order\Item::t01()
 	 * @return File[]
 	 */
@@ -41,7 +42,7 @@ final class Item extends \Df\API\Document {
 	/**
 	 * 2019-02-26
 	 * @used-by \Inkifi\Mediaclip\API\Facade\Order\Item::path()
-	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::_p()
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::downloadAndUploadOrderFilesToServer()
 	 * @return string «f113e39c-ccc9-4dec-bc38-a5825493647e»
 	 */
@@ -92,8 +93,9 @@ final class Item extends \Df\API\Document {
 	 * 		ORDER BY created_at DESC;
 	 * Such records have distinct `order_id` values
 	 * and they belong to repetitive order placement attempts.
-	 * @used-by \Inkifi\Mediaclip\API\Facade\Order\Item::path()
 	 * @used-by store()
+	 * @used-by \Inkifi\Mediaclip\API\Facade\Order\Item::path()
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
 	 * @return OI
 	 */
 	function oi() {return $this->oic()->getLastItem();}

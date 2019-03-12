@@ -1,6 +1,7 @@
 <?php
 namespace Inkifi\Mediaclip\H\AvailableForDownload;
 use Inkifi\Mediaclip\API\Entity\Order\Item as mOI;
+use Inkifi\Mediaclip\API\Entity\Order\Item\File as F;
 use Inkifi\Mediaclip\Event as Ev;
 use Magento\Customer\Model\Customer;
 use Magento\Sales\Model\Order as O;
@@ -25,11 +26,9 @@ final class Pureprint {
 		// «Modify orders numeration for Mediaclip»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 		$o = $ev->o(); /** @var O $o */
-		$array = [];
-		foreach (ikf_api_oi($o->getId()) as $mOI) { /** @var mOI $mOI */
-			$this->pOI($mOI);			
-		}
-		if (!empty($array)) {
+		if ($items = df_map(ikf_api_oi($o->getId()), function(mOI $mOI) {return $this->pOI($mOI);})) {
+			/** @var array(array(string => mixed)) $items */
+			$array['orderData']['items'] = $items;
 			$array['destination']['name'] = 'pureprint';
 			$array['orderData']['sourceOrderId'] = $o->getId();
 			self::zl()->info(json_encode($array));
@@ -86,64 +85,64 @@ final class Pureprint {
 	 * «Generate JSON data for photo-books»: https://www.upwork.com/ab/f/contracts/21011549
 	 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
 	 * @used-by _p()
-	 * @param string|null $v
+	 * @param F $f
 	 * @param string $m
 	 * @return string
 	 */
-    private function code($v, $m) {return $v ?: (
+    private function code(F $f, $m) {return $f->id() ?: (
     	'gifting' === ($m = strtolower($m)) ? 'gift' : ('print' === $m ? 'prints-set-01' : 'photobook-jacket')
 	);}
 
 	/**
 	 * 2019-02-27
+	 * @used-by pOI()
 	 * @param mOI $mOI
-	 * @used-by _p()
+	 * @return array(string => mixed)
 	 */
     private function pOI(mOI $mOI) {
+    	$r = []; /** @var array(string => mixed) $r */
 		$mP = $mOI->mProduct(); /** @var mP $mP */
-		if ($mP->sendJson()) {
-			$linesDetails = mc_h()->getMediaClipOrderLinesDetails($mOI->id());
-			if (count($linesDetails->files)) {
-				/**
-				* 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
-				* «Generate JSON data for photo-books»
-				* https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
-				* 2018-11-03
-				* An example of $linesDetails->files
-				*	[
-				*		{
-				*			"id": "photobook-jacket",
-				*			"productId": "$(package:inkifi/photobooks)/products/hard-cover-gray-210x210mm-70",
-				*			"plu": "INKIFI-HCB210-M-70",
-				*			"quantity": 1,
-				*			"url": "https://renderstouse.blob.core.windows.net/0c25168e-eda3-41d4-b266-8259566d2507/dust.pdf?sv=2018-03-28&sr=c&sig=XzCB%2B2CWlpqNFqVf6CnoVr8ICDGufTexaNqyzxMDUx8%3D&st=2018-11-02T19%3A36%3A41Z&se=2018-12-02T19%3A38%3A41Z&sp=r",
-				*			"order": 0
-				*		},
-				*		{
-				*			"id": "photobook-pages",
-				*			"productId": "$(package:inkifi/photobooks)/products/hard-cover-gray-210x210mm-70",
-				*			"plu": "INKIFI-HCB210-M-70",
-				*			"quantity": 1,
-				*			"url": "https://renderstouse.blob.core.windows.net/0c25168e-eda3-41d4-b266-8259566d2507/0d0e8542-db8d-475b-95bb-33156dc6551a_0c25168e-eda3-41d4-b266-8259566d2507.pdf?sv=2018-03-28&sr=c&sig=maMnPG2XIrQuLC3mArAgf3YKrM6EzFwNMggwApqMTeo%3D&st=2018-11-02T19%3A36%3A43Z&se=2018-12-02T19%3A38%3A43Z&sp=r",
-				*			"order": 1
-				*		}
-				*	]
-				*/
-				$oi = $mOI->oi(); /** @var OI $oi */
-				/** @var string $mod */
-				$mod = df_attribute_set(df_product($oi->getProductId()))->getAttributeSetName();
-				$array['orderData']['items'][] = [
-					'sku' => $mP->plu()
-					,'sourceItemId' => $mOI->id()
-					,'components' => array_values(df_map($linesDetails->files, function($f) use($mod, $mP) {return [
-					'code' => $mP['json_code'] ?: $this->code(dfo($f, 'id'), $mod)
+		if ($mP->sendJson() && ($files = $mOI->files())) { /** @var F[] $files */
+			/**
+			 * 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+			 * «Generate JSON data for photo-books»
+			 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
+			 * 2019-03-12
+			 * Data item examples:
+			 * 1)
+			 *		{
+			 *			"id": "photobook-jacket",
+			 *			"productId": "$(package:inkifi/photobooks)/products/hard-cover-gray-210x210mm-70",
+			 *			"plu": "INKIFI-HCB210-M-70",
+			 *			"quantity": 1,
+			 *			"url": "https://renderstouse.blob.core.windows.net/0c25168e-eda3-41d4-b266-8259566d2507/dust.pdf?sv=2018-03-28&sr=c&sig=XzCB%2B2CWlpqNFqVf6CnoVr8ICDGufTexaNqyzxMDUx8%3D&st=2018-11-02T19%3A36%3A41Z&se=2018-12-02T19%3A38%3A41Z&sp=r",
+			 *			"order": 0
+			 *		}
+			 * 2)
+			 *		{
+			 *			"id": "photobook-pages",
+			 *			"productId": "$(package:inkifi/photobooks)/products/hard-cover-gray-210x210mm-70",
+			 *			"plu": "INKIFI-HCB210-M-70",
+			 *			"quantity": 1,
+			 *			"url": "https://renderstouse.blob.core.windows.net/0c25168e-eda3-41d4-b266-8259566d2507/0d0e8542-db8d-475b-95bb-33156dc6551a_0c25168e-eda3-41d4-b266-8259566d2507.pdf?sv=2018-03-28&sr=c&sig=maMnPG2XIrQuLC3mArAgf3YKrM6EzFwNMggwApqMTeo%3D&st=2018-11-02T19%3A36%3A43Z&se=2018-12-02T19%3A38%3A43Z&sp=r",
+			 *			"order": 1
+			 *		}
+			*/
+			$oi = $mOI->oi(); /** @var OI $oi */
+			/** @var string $mod */
+			$mod = df_attribute_set(df_product($oi->getProductId()))->getAttributeSetName();
+			$r = [
+				'sku' => $mP->plu()
+				,'sourceItemId' => $mOI->id()
+				,'components' => array_values(df_map($files, function(F $f) use($mod, $mP) {return [
+					'code' => $mP['json_code'] ?: $this->code($f, $mod)
 					,'fetch' => true
-					,'path' => $f->url
-					];}))
-					,'quantity' => $mP->includeQuantityInJson() ? (int)$oi->getQtyOrdered() : 1
-				];
-			}
+					,'path' => $f->url()
+				];}))
+				,'quantity' => $mP->includeQuantityInJson() ? (int)$oi->getQtyOrdered() : 1
+			];
 		}
+		return $r;
 	}
 
 	/**

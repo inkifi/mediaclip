@@ -33,7 +33,6 @@ final class Settings extends \Df\Config\Settings {
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::CheckoutWithSingleProduct()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::consolidateCustomerAndGetCustomerToken()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::CreateProject()
-	 * @used-by \Mangoit\MediaclipHub\Helper\Data::getMediaClipOrderLinesDetails()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::getMediaClipProjects()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::GetTokenForEndUser()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::renewMediaClipToken()
