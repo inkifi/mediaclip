@@ -1,6 +1,8 @@
 <?php
 namespace Inkifi\Mediaclip;
 use Magento\Sales\Model\Order as O;
+use Magento\Sales\Model\Order\Item as OI;
+use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OIC;
 /**
  * 2018-08-16
  * 2019-02-24
@@ -77,6 +79,18 @@ final class Event extends \Df\API\Document {
 	function o() {return dfc($this, function() {return df_order($this->oidI());});}
 
 	/**
+	 * 2019-03-13 See the comment in the class header.
+	 * @return OI
+	 */
+	function oi() {return dfc($this, function() {
+		$oic = df_oic(); /** @var OIC $oic */
+		$oic->addFieldToFilter('mediaclip_project_id', ['eq' => $this->projectId()]);
+		$oic->addFieldToFilter('order_id', ['eq' => $this->oidI()]);
+		df_assert_eq(1, $oic->count());
+		return $oic->getFirstItem();
+	});}
+
+	/**
 	 * 2019-02-24
 	 * @used-by oidI()
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::pAvailableForDownload()
@@ -88,6 +102,7 @@ final class Event extends \Df\API\Document {
 	/**
 	 * 2019-02-24
 	 * @used-by o()
+	 * @used-by oi()
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::l()
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::pAvailableForDownload()
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::pShipped()
@@ -97,6 +112,7 @@ final class Event extends \Df\API\Document {
 
 	/**
 	 * 2019-02-27
+	 * @used-by oi()
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pwinty::_p()
 	 * @used-by \Inkifi\Mediaclip\H\Shipped::p()
 	 * @return string	«4a9a1d14-0807-42ab-9a03-e2d54d9b8d12»
