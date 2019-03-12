@@ -1,8 +1,11 @@
 <?php
 namespace Inkifi\Mediaclip;
+use Magento\Catalog\Model\Product as P;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Item as OI;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OIC;
+use Mangoit\MediaclipHub\Model\Orders as MO;
+use Mangoit\MediaclipHub\Setup\UpgradeSchema as Schema;
 /**
  * 2018-08-16
  * 2019-02-24
@@ -72,6 +75,20 @@ use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OIC;
  */
 final class Event extends \Df\API\Document {
 	/**
+	 * 2019-03-13
+	 * \Inkifi\Mediaclip\H\AvailableForDownload::_p()
+	 * @return string	«pwinty»
+	 */
+	function folder() {return $this->product()[Schema::P__UPLOAD_FOLDER];}
+
+	/**
+	 * 2019-03-13
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload::_p()
+	 * @return MO
+	 */
+	function mo() {return dfc($this, function() {return MO::byOIdE($this->oidE());});}
+
+	/**
 	 * 2019-02-27
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::_p()
 	 * @return O
@@ -92,6 +109,7 @@ final class Event extends \Df\API\Document {
 
 	/**
 	 * 2019-02-24
+	 * @used-by mo()
 	 * @used-by oidI()
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::pAvailableForDownload()
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::pShipped()
@@ -118,6 +136,20 @@ final class Event extends \Df\API\Document {
 	 * @return string	«4a9a1d14-0807-42ab-9a03-e2d54d9b8d12»
 	 */
 	function projectId() {return $this['projectId'];}
+
+	/**
+	 * 2019-03-13
+	 * @used-by folder()
+	 * @return P
+	 */
+	private function product() {return dfc($this, function() {return df_product($this->productId());});}
+
+	/**
+	 * 2019-03-13
+	 * @used-by product()
+	 * @return int	«74134»
+	 */
+	private function productId() {return intval($this['storeData/productId']);}
 
 	/**
 	 * 2019-02-24
