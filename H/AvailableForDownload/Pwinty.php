@@ -10,7 +10,6 @@ use Magento\Sales\Model\Order\Item as OI;
 use Magento\Store\Model\StoreManagerInterface as IStoreManager;
 use Mangoit\MediaclipHub\Model\Orders as mOrder;
 use Mangoit\MediaclipHub\Model\Product as mP;
-use Mangoit\MediaclipHub\Setup\UpgradeSchema as Schema;
 use pwinty\PhpPwinty;
 use Zend\Log\Logger as zL;
 // 2019-02-24
