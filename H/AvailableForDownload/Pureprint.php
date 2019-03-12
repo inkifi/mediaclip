@@ -41,8 +41,7 @@ final class Pureprint {
 			// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/3
 			$contents = json_encode($d, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT); /** @var string $contents */
 			$file = "{$o->getIncrementId()}.json"; /** @var string $file */
-			$mOI = df_first($mItems); /** @var mOI $mOI */
-			self::writeLocal($mOI->oi(), $mOI->mProduct()->label(), $file, $contents);
+			self::writeLocal($mItems, $file, $contents);
 			self::writeRemote($file, $contents);
 		}
 	}
@@ -167,16 +166,17 @@ final class Pureprint {
 	/**
 	 * 2019-02-27
 	 * @used-by _p()
-	 * @param OI $oi
-	 * @param string $product
+	 * @param mOI[] $mItems
 	 * @param string $file
 	 * @param string $contents
 	 */
-	private static function writeLocal(OI $oi, $product, $file, $contents) {
+	private static function writeLocal(array $mItems, $file, $contents) {
+		$mOI = df_first($mItems); /** @var mOI $mOI */
+		$oi = $mOI->oi(); /** @var OI $oi */
 		$o = $oi->getOrder(); /** @var O $o */
 		$dir = df_cc_path(
 			BP, 'ftp_json', date('d-m-Y', strtotime($o->getCreatedAt()))
-			,$o->getIncrementId(), $oi->getId(), $product
+			,$o->getIncrementId(), $oi->getId(), $mOI->mProduct()->label()
 		); /** @var string $dir */
 		df_file()->mkdir($dir);
 		file_put_contents("$dir/$file", $contents);

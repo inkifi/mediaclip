@@ -75,6 +75,7 @@ final class Item extends \Df\API\Document {
 	 *		"updated_at": "2018-03-16 06:06:24"
 	 *	}
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::writeLocal()
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pwinty::_p()
 	 * @return mP
 	 */
@@ -96,6 +97,7 @@ final class Item extends \Df\API\Document {
 	 * @used-by store()
 	 * @used-by \Inkifi\Mediaclip\API\Facade\Order\Item::path()
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::writeLocal()
 	 * @return OI
 	 */
 	function oi() {return $this->oic()->getLastItem();}
