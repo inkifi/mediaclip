@@ -41,6 +41,9 @@ final class Pureprint {
 		 * It does not exist for Pwinty because the Pwinty's handler
 		 * uses the @see \Mangoit\MediaclipHub\Setup\UpgradeSchema::OI__ITEM_DOWNLOAD_STATUS flag
 		 * and it passes an order to Pwinty only when ALL order items have the flag set.
+		 * 4) I have made a fix for it:
+		 * @see \Inkifi\Mediaclip\Event::areOIOfTheSameTypeAvailableForDownload()
+		 * @see \Inkifi\Mediaclip\H\AvailableForDownload::_p()
 		 */
 		$mItems = ikf_api_oi($o->getId()); /** @var mOI[] $mItems */
 		if ($items = df_map($mItems, function(mOI $mOI) {return $this->pOI($mOI);})) {

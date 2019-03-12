@@ -76,10 +76,37 @@ use Mangoit\MediaclipHub\Setup\UpgradeSchema as Schema;
 final class Event extends \Df\API\Document {
 	/**
 	 * 2019-03-13
-	 * \Inkifi\Mediaclip\H\AvailableForDownload::_p()
-	 * @return string	«pwinty»
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload::_p()
+	 * @return bool
 	 */
-	function folder() {return $this->product()[Schema::P__UPLOAD_FOLDER];}
+	function areAllOIAvailableForDownload() {return $this->_areAllOIAvailableForDownload(
+		$this->o()->getItems()
+	);}
+
+	/**
+	 * 2019-03-13
+	 * @return bool
+	 */
+	function areOIOfTheSameTypeAvailableForDownload() {return $this->_areAllOIAvailableForDownload(
+		$this->oiOfTheSameType()
+	);}
+
+	/**
+	 * 2019-03-13
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload::_p()
+	 * @return bool
+	 */
+	function isPwinty() {return 'pwinty' === $this->type();}
+
+	/**
+	 * 2019-03-13
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload::_p()
+	 */
+	function markOIAsAvailableForDownload() {
+		$oi = $this->oi(); /** @var OI $oi */
+		$oi[Schema::OI__ITEM_DOWNLOAD_STATUS] = 1;
+		$oi->save();
+	}
 
 	/**
 	 * 2019-03-13
@@ -94,18 +121,6 @@ final class Event extends \Df\API\Document {
 	 * @return O
 	 */
 	function o() {return dfc($this, function() {return df_order($this->oidI());});}
-
-	/**
-	 * 2019-03-13 See the comment in the class header.
-	 * @return OI
-	 */
-	function oi() {return dfc($this, function() {
-		$oic = df_oic(); /** @var OIC $oic */
-		$oic->addFieldToFilter('mediaclip_project_id', ['eq' => $this->projectId()]);
-		$oic->addFieldToFilter('order_id', ['eq' => $this->oidI()]);
-		df_assert_eq(1, $oic->count());
-		return $oic->getFirstItem();
-	});}
 
 	/**
 	 * 2019-02-24
@@ -129,6 +144,19 @@ final class Event extends \Df\API\Document {
 	function oidI() {return dfc($this, function() {return ikf_eti($this->oidE());});}
 
 	/**
+	 * 2019-03-13
+	 * @used-by areOIOfTheSameTypeAvailableForDownload()
+	 * @return OI[]
+	 */
+	function oiOfTheSameType() {return dfc($this, function() {
+		$t = $this->type(); /** @var string $t */
+		return array_values(array_filter(
+			$this->o()->getItems()
+			,function(OI $i) use($t) {return $t === $i->getProduct()[Schema::P__UPLOAD_FOLDER];}
+		));
+	});}
+
+	/**
 	 * 2019-02-27
 	 * @used-by oi()
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pwinty::_p()
@@ -136,6 +164,39 @@ final class Event extends \Df\API\Document {
 	 * @return string	«4a9a1d14-0807-42ab-9a03-e2d54d9b8d12»
 	 */
 	function projectId() {return $this['projectId'];}
+
+	/**
+	 * 2019-03-13
+	 * @used-by isPwinty()
+	 * @used-by oiOfTheSameType()
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload::_p()
+	 * @return string	«ascendia», «prodigi», «pwinty»
+	 */
+	function type() {return $this->product()[Schema::P__UPLOAD_FOLDER];}
+
+	/**
+	 * 2019-03-13
+	 * @used-by areAllOIAvailableForDownload()
+	 * @used-by areOIOfTheSameTypeAvailableForDownload()
+	 * @param OI[] $oiA
+	 * @return bool
+	 */
+	private function _areAllOIAvailableForDownload(array $oiA) {return !df_find(
+		$oiA, function(OI $oi) {return !$oi[Schema::OI__ITEM_DOWNLOAD_STATUS];}
+	);}
+
+	/**
+	 * 2019-03-13 See the comment in the class header.
+	 * @used-by markOIAsAvailableForDownload()
+	 * @return OI
+	 */
+	private function oi() {return dfc($this, function() {
+		$oic = df_oic(); /** @var OIC $oic */
+		$oic->addFieldToFilter('mediaclip_project_id', ['eq' => $this->projectId()]);
+		$oic->addFieldToFilter('order_id', ['eq' => $this->oidI()]);
+		df_assert_eq(1, $oic->count());
+		return $oic->getFirstItem();
+	});}
 
 	/**
 	 * 2019-03-13
