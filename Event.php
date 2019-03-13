@@ -159,7 +159,7 @@ final class Event extends \Df\API\Document {
 	/**
 	 * 2019-02-27
 	 * @used-by oi()
-	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pwinty::_p()
+	 * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
 	 * @used-by \Inkifi\Mediaclip\H\Shipped::p()
 	 * @return string	«4a9a1d14-0807-42ab-9a03-e2d54d9b8d12»
 	 */

@@ -76,7 +76,7 @@ final class Item extends \Df\API\Document {
 	 *	}
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::writeLocal()
-	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pwinty::_p()
+	 * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
 	 * @return mP
 	 */
 	function mProduct() {return dfc($this, function() {return ikf_product($this->product());});}
@@ -143,7 +143,7 @@ final class Item extends \Df\API\Document {
 	 *			}
 	 *		]
 	 *	}
-	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pwinty::_p()
+	 * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::downloadAndUploadOrderFilesToServer()
 	 * @return Project
 	 */

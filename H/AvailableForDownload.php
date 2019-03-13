@@ -2,12 +2,9 @@
 namespace Inkifi\Mediaclip\H;
 use Inkifi\Mediaclip\Event as Ev;
 use Inkifi\Mediaclip\H\AvailableForDownload\Pureprint;
-use Inkifi\Mediaclip\H\AvailableForDownload\Pwinty;
+use Inkifi\Pwinty\AvailableForDownload as Pwinty;
 use Inkifi\Mediaclip\H\Logger as L;
-use Magento\Sales\Model\Order as O;
-use Magento\Sales\Model\Order\Item as OI;
 use Mangoit\MediaclipHub\Model\Orders as MO;
-use Mangoit\MediaclipHub\Setup\UpgradeSchema as Schema;
 // 2019-02-24
 final class AvailableForDownload {
 	/**
