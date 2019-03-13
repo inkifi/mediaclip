@@ -4,6 +4,7 @@ use Magento\Catalog\Model\Product as P;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Item as OI;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OIC;
+use Magento\Store\Model\Store;
 use Mangoit\MediaclipHub\Model\Orders as MO;
 use Mangoit\MediaclipHub\Setup\UpgradeSchema as Schema;
 /**
@@ -117,6 +118,7 @@ final class Event extends \Df\API\Document {
 
 	/**
 	 * 2019-02-27
+	 * @used-by store()
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::_p()
 	 * @return O
 	 */
@@ -164,6 +166,13 @@ final class Event extends \Df\API\Document {
 	 * @return string	«4a9a1d14-0807-42ab-9a03-e2d54d9b8d12»
 	 */
 	function projectId() {return $this['projectId'];}
+
+	/**
+	 * 2019-03-13
+	 * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
+	 * @return Store
+	 */
+	function store() {return $this->o()->getStore();}
 
 	/**
 	 * 2019-03-13
