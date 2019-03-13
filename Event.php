@@ -127,6 +127,7 @@ final class Event extends \Df\API\Document {
 	/**
 	 * 2019-03-13 See the comment in the class header.
 	 * @used-by markOIAsAvailableForDownload()
+	 * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
 	 * @return OI
 	 */
 	function oi() {return dfc($this, function() {

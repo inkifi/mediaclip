@@ -7,7 +7,6 @@ use Magento\Catalog\Model\Product as P;
 use Magento\Sales\Model\Order\Item as OI;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OIC;
 use Magento\Store\Model\Store;
-use Mangoit\MediaclipHub\Model\Mediaclip;
 use Mangoit\MediaclipHub\Model\Product as mP;
 /**
  * 2019-02-26
