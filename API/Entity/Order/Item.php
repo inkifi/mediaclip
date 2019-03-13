@@ -43,17 +43,9 @@ final class Item extends \Df\API\Document {
 	 * 2019-02-26
 	 * @used-by \Inkifi\Mediaclip\API\Facade\Order\Item::path()
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
-	 * @used-by \Mangoit\MediaclipHub\Helper\Data::downloadAndUploadOrderFilesToServer()
 	 * @return string «f113e39c-ccc9-4dec-bc38-a5825493647e»
 	 */
 	function id() {return $this['id'];}
-
-	/**
-	 * 2019-02-26
-	 * @used-by \Mangoit\MediaclipHub\Helper\Data::downloadAndUploadOrderFilesToServer()
-	 * @return bool
-	 */
-	function isAvailableForDownload() {return 'AvailableForDownload' === $this['status/value'];}
 
 	/**
 	 * 2019-03-04
@@ -103,60 +95,8 @@ final class Item extends \Df\API\Document {
 	function oi() {return $this->oic()->getLastItem();}
 
 	/**
-	 * 2019-02-27
-	 * @used-by oi()
-	 * @return OIC
-	 */
-	function oic() {return dfc($this, function() {return df_oic()->addFieldToFilter(
-		'mediaclip_project_id', ['eq' => $this->projectId()]
-	);});}
-
-	/**
-	 * 2019-02-26
-	 * @used-by productM()
-	 * @used-by \Mangoit\MediaclipHub\Helper\Data::downloadAndUploadOrderFilesToServer()
-	 * @return P
-	 */
-	function product() {return dfc($this, function() {return df_product(
-		(int)$this['storeData/productId']
-	);});}
-
-	/**
-	 * 2019-02-26
-	 * A data item:
-	 * {
-	 *		"storeData": {
-	 *			"userId": "74312"
-	 *		},
-	 *		"projectId": "f113e39c-ccc9-4dec-bc38-a5825493647e",
-	 *		"properties": {
-	 *			"storeProductId": "80314"
-	 *		},
-	 *		"items": [
-	 *			{
-	 *				"productId": "$(package:inkifi/us-prints)/products/vintage-polaroids",
-	 *				"plu": "US-INKIFI-VP",
-	 *				"quantity": 80,
-	 *				"properties": {
-	 *					"storeProductId": "80314"
-	 *				}
-	 *			}
-	 *		]
-	 *	}
-	 * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
-	 * @used-by \Mangoit\MediaclipHub\Helper\Data::downloadAndUploadOrderFilesToServer()
-	 * @return Project
-	 */
-	function project() {return dfc($this, function() {
-		$m = df_new_om(Mediaclip::class); /** @var Mediaclip $m */
-		$m->load($this->projectId(), 'project_id');
-		return new Project(df_json_decode($m['project_details']));
-	});}
-
-	/**
 	 * 2019-02-26
 	 * @used-by oic()
-	 * @used-by project()
 	 * @return string	«8cd1f396-d465-403d-8126-c1a1cccde5de»
 	 */
 	function projectId() {return $this['projectId'];}
@@ -167,4 +107,22 @@ final class Item extends \Df\API\Document {
 	 * @return Store
 	 */
 	function store() {return $this->oi()->getStore();}
+
+	/**
+	 * 2019-02-27
+	 * @used-by oi()
+	 * @return OIC
+	 */
+	private function oic() {return dfc($this, function() {return df_oic()->addFieldToFilter(
+		'mediaclip_project_id', ['eq' => $this->projectId()]
+	);});}
+
+	/**
+	 * 2019-02-26
+	 * @used-by productM()
+	 * @return P
+	 */
+	private function product() {return dfc($this, function() {return df_product(
+		(int)$this['storeData/productId']
+	);});}
 }

@@ -125,6 +125,19 @@ final class Event extends \Df\API\Document {
 	function o() {return dfc($this, function() {return df_order($this->oidI());});}
 
 	/**
+	 * 2019-03-13 See the comment in the class header.
+	 * @used-by markOIAsAvailableForDownload()
+	 * @return OI
+	 */
+	function oi() {return dfc($this, function() {
+		$oic = df_oic(); /** @var OIC $oic */
+		$oic->addFieldToFilter('mediaclip_project_id', ['eq' => $this->projectId()]);
+		$oic->addFieldToFilter('order_id', ['eq' => $this->oidI()]);
+		df_assert_eq(1, $oic->count());
+		return $oic->getFirstItem();
+	});}
+
+	/**
 	 * 2019-02-24
 	 * @used-by mo()
 	 * @used-by oidI()
@@ -193,19 +206,6 @@ final class Event extends \Df\API\Document {
 	private function _areAllOIAvailableForDownload(array $oiA) {return !df_find(
 		$oiA, function(OI $oi) {return !$oi[Schema::OI__ITEM_DOWNLOAD_STATUS];}
 	);}
-
-	/**
-	 * 2019-03-13 See the comment in the class header.
-	 * @used-by markOIAsAvailableForDownload()
-	 * @return OI
-	 */
-	private function oi() {return dfc($this, function() {
-		$oic = df_oic(); /** @var OIC $oic */
-		$oic->addFieldToFilter('mediaclip_project_id', ['eq' => $this->projectId()]);
-		$oic->addFieldToFilter('order_id', ['eq' => $this->oidI()]);
-		df_assert_eq(1, $oic->count());
-		return $oic->getFirstItem();
-	});}
 
 	/**
 	 * 2019-03-13
