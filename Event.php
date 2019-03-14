@@ -97,7 +97,7 @@ final class Event extends \Df\API\Document {
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload::_p()
 	 * @return bool
 	 */
-	function isPwinty() {return 'pwinty' === $this->type();}
+	function isPwinty() {return ikf_product_is_pwinty($this->product());}
 
 	/**
 	 * 2019-03-13
@@ -195,7 +195,7 @@ final class Event extends \Df\API\Document {
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload::_p()
 	 * @return string	«ascendia», «prodigi», «pwinty»
 	 */
-	function type() {return $this->product()[Schema::P__UPLOAD_FOLDER];}
+	function type() {return ikf_product_printer($this->product());}
 
 	/**
 	 * 2019-03-13
@@ -210,7 +210,8 @@ final class Event extends \Df\API\Document {
 
 	/**
 	 * 2019-03-13
-	 * @used-by folder()
+	 * @used-by isPwinty()
+	 * @used-by type()
 	 * @return P
 	 */
 	private function product() {return dfc($this, function() {return df_product($this->productId());});}

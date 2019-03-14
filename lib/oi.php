@@ -24,8 +24,12 @@ use Inkifi\Mediaclip\API\Facade\Order as F;
  * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
  * @used-by \Inkifi\Mediaclip\T\CaseT\Order\Item::t01()
  * @param int $id
+ * @param string|null $printer [optional]
  * @return mOI[]
  */
-function ikf_api_oi($id) {return df_map(F::s()->get($id)['lines'], function(array $i) {return
-	new mOI($i)
-;});}
+function ikf_api_oi($id, $printer = null) {
+	$r = df_map(F::s()->get($id)['lines'], function(array $i) {return new mOI($i);});  /** @var mOI[] $r */
+	return !$printer ? $r : array_filter($r, function(mOI $i) use($printer) {return
+		$printer === ikf_product_printer($i->oi())
+	;});
+}

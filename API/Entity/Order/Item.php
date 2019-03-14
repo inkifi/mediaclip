@@ -85,6 +85,7 @@ final class Item extends \Df\API\Document {
 	 * 		ORDER BY created_at DESC;
 	 * Such records have distinct `order_id` values
 	 * and they belong to repetitive order placement attempts.
+	 * @used-by ikf_api_oi()
 	 * @used-by store()
 	 * @used-by \Inkifi\Mediaclip\API\Facade\Order\Item::path()
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
