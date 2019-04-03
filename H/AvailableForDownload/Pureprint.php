@@ -80,7 +80,7 @@ final class Pureprint {
 
 	/**
 	 * 2019-02-27
-	 * @used-by pOI()
+	 * @used-by _p()
 	 * @param mOI $mOI
 	 * @return array(string => mixed)
 	 */
@@ -211,11 +211,7 @@ final class Pureprint {
 		// 2018-08-20 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 		// «FTP upload to ftp.pureprint.com has stopped working»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/6
-		df_sftp()->open([
-			'host' => 'ftp.pureprint.com'
-			,'username' => 'Inkifi'
-			,'password' => 'Summ3rD4ys!'
-		]);
+		df_sftp()->open(['host' => 'ftp.pureprint.com', 'password' => 'Summ3rD4ys!', 'username' => 'Inkifi']);
 		df_sftp()->write("/Inkifi/$file", $contents);
 		df_sftp()->close();
 	}

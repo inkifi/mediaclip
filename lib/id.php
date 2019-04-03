@@ -8,11 +8,11 @@ use Magento\Store\Model\Store;
  * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
  * @used-by \Inkifi\Mediaclip\Event::oidI()
  * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::execute()
- * @used-by \Mangoit\MediaclipHub\Controller\Index\PwintyOrderStatusUpdate::execute()
+ * @used-by \Mangoit\MediaclipHub\Model\Orders::oidMagento()
  * @param string $v
  * @return int
  */
-function ikf_eti($v) {return intval(df_last(explode('-', $v)));}
+function ikf_eti($v) {return (int)df_last(explode('-', $v));}
 
 /**
  * 2018-08-16
