@@ -1,6 +1,5 @@
 <?php
 namespace Inkifi\Mediaclip\API\Entity;
-use Mangoit\MediaclipHub\Model\Product as mP;
 /**
  * 2019-02-26
  * A data item:
