@@ -10,10 +10,10 @@ final class Order extends \Df\API\Facade {
 	/**
 	 * 2019-02-26
 	 * @override
-	 * @see \Df\API\Facade::storeById()
+	 * @see \Df\API\Facade::storeByP()
 	 * @used-by \Df\API\Facade::p()
-	 * @param int|string $id
+	 * @param int|string $p
 	 * @return Store|null
 	 */
-	protected function storeById($id) {return df_order($id)->getStore();}
+	protected function storeByP($p) {return df_order($p)->getStore();}
 }

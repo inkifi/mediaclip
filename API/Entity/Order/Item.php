@@ -1,7 +1,6 @@
 <?php
 namespace Inkifi\Mediaclip\API\Entity\Order;
 use Inkifi\Mediaclip\API\Entity\Order\Item\File;
-use Inkifi\Mediaclip\API\Entity\Project;
 use Inkifi\Mediaclip\API\Facade\Order\Item as fOI;
 use Magento\Catalog\Model\Product as P;
 use Magento\Sales\Model\Order\Item as OI;
