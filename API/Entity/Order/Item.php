@@ -30,6 +30,7 @@ final class Item extends \Df\API\Document {
 	 * 2019-03-04
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
 	 * @used-by \Inkifi\Mediaclip\T\CaseT\Order\Item::t01()
+	 * @used-by \Inkifi\Pwinty\AvailableForDownload::images()
 	 * @return File[]
 	 */
 	function files() {return dfc($this, function() {
@@ -66,7 +67,7 @@ final class Item extends \Df\API\Document {
 	 *	}
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::writeLocal()
-	 * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
+	 * @used-by \Inkifi\Pwinty\AvailableForDownload::images()
 	 * @return mP
 	 */
 	function mProduct() {return dfc($this, function() {return ikf_product($this->product());});}

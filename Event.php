@@ -227,6 +227,7 @@ final class Event extends \Df\API\Document {
 	/**
 	 * 2019-02-24
 	 * @used-by \Inkifi\Mediaclip\H\Shipped::p()
+	 * @used-by \Inkifi\Pwinty\AvailableForDownload::images()
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\OrderStatusUpdateEndpoint::ev()
 	 * @return Event
 	 */
