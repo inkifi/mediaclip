@@ -27,7 +27,8 @@ use Mangoit\MediaclipHub\Model\ResourceModel\Product\Collection as mPC;
  */
 function ikf_product($p) {
 	$r = df_new_om(mP::class); /** @var mP $r */
-	$r->loadByPlu($p instanceof P ? $p['mediaclip_print_product'] : $p);
+	$r->loadByPlu($p instanceof P ? $p[implode('_', ['mediaclip', $p['mediaclip_module'], 'product'])] : $p);
+	df_assert($r->getId());
 	return $r;
 }
 
