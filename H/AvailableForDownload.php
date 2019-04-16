@@ -19,16 +19,19 @@ final class AvailableForDownload {
 	 */
 	private function _p() {
     	$ev = Ev::s(); /** @var Ev $ev */
-		$ev->markOIAsAvailableForDownload();
-		$mo = $ev->mo(); /** @var MO $mo */
-		L::l('mediaclipOrderData'); L::l($mo->getData());
-		if ($ev->areAllOIAvailableForDownload()) {
-			// 2019-03-13 This flag is never used.
-			$mo->markAsAvailableForDownload();
-		}
-		if ($ev->areOIOfTheSameTypeAvailableForDownload()) {
-			L::l("Upload folder: {$ev->type()}");
-			$ev->isPwinty() ? Pwinty::p() : Pureprint::p();
+    	// 2019-04-17 Mediaclip can send the same notification multiple times.
+    	if (!$ev->isOIAvailableForDownload()) {
+			$ev->markOIAsAvailableForDownload();
+			$mo = $ev->mo(); /** @var MO $mo */
+			L::l('mediaclipOrderData'); L::l($mo->getData());
+			if ($ev->areAllOIAvailableForDownload()) {
+				// 2019-03-13 This flag is never used.
+				$mo->markAsAvailableForDownload();
+			}
+			if ($ev->areOIOfTheSameTypeAvailableForDownload()) {
+				L::l("Upload folder: {$ev->type()}");
+				$ev->isPwinty() ? Pwinty::p() : Pureprint::p();
+			}
 		}
 	}
 

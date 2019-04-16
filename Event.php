@@ -95,6 +95,12 @@ final class Event extends \Df\API\Document {
 	/**
 	 * 2019-03-13
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload::_p()
+	 */
+	function isOIAvailableForDownload() {return !!$this->oi()[Schema::OI__ITEM_DOWNLOAD_STATUS];}
+
+	/**
+	 * 2019-03-13
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload::_p()
 	 * @return bool
 	 */
 	function isPwinty() {return ikf_product_is_pwinty($this->product());}
@@ -121,13 +127,16 @@ final class Event extends \Df\API\Document {
 	 * 2019-02-27
 	 * @used-by store()
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::_p()
+	 * @used-by \Inkifi\Mediaclip\H\Shipped::p()
 	 * @return O
 	 */
 	function o() {return dfc($this, function() {return df_order($this->oidI());});}
 
 	/**
 	 * 2019-03-13 See the comment in the class header.
+	 * @used-by isOIAvailableForDownload()
 	 * @used-by markOIAsAvailableForDownload()
+	 * @used-by \Inkifi\Mediaclip\H\Shipped::p()
 	 * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
 	 * @return OI
 	 */
