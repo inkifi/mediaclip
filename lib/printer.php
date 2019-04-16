@@ -22,5 +22,3 @@ function ikf_product_is_pwinty($p) {return Printer::PWINTY === ikf_product_print
  * @return string|null
  */
 function ikf_product_printer($p) {return df_product($p)[Schema::P__UPLOAD_FOLDER];}
-
-

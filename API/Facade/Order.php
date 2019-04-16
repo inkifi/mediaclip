@@ -15,5 +15,5 @@ final class Order extends \Df\API\Facade {
 	 * @param int|string $p
 	 * @return Store|null
 	 */
-	protected function storeByP($p) {return df_order($p)->getStore();}
+	protected function storeByP($p) {return df_order(ikf_eti($p))->getStore();}
 }

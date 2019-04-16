@@ -28,7 +28,8 @@ use Inkifi\Mediaclip\API\Facade\Order as F;
  * @return mOI[]
  */
 function ikf_api_oi($id, $printer = null) {
-	$r = df_map(F::s()->get($id)['lines'], function(array $i) {return new mOI($i);});  /** @var mOI[] $r */
+	/** @var mOI[] $r */
+	$r = df_map(F::s()->get(ikf_ite($id))['lines'], function(array $i) {return new mOI($i);});
 	return !$printer ? $r : array_filter($r, function(mOI $i) use($printer) {return
 		$printer === ikf_product_printer($i->oi())
 	;});
