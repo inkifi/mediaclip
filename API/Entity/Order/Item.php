@@ -70,7 +70,19 @@ final class Item extends \Df\API\Document {
 	 * @used-by \Inkifi\Pwinty\AvailableForDownload::images()
 	 * @return mP
 	 */
-	function mProduct() {return dfc($this, function() {return ikf_product($this->product());});}
+	function mProduct() {return dfc($this, function() {
+		$r = df_new_om(mP::class); /** @var mP $r */
+		$p = $this->product(); /** @var P $p */
+		$r->loadByPlu(
+			!($o = df_find($this->oi()->getProductOptionByCode('options'), function(array $o) {return
+				'Frame Colour' === $o['label']
+			;}))
+			? $p[implode('_', ['mediaclip', $p['mediaclip_module'], 'product'])]
+			: df_fetch_col('catalog_product_option_type_value', 'sku', 'option_type_id', $o['option_value'])
+		);
+		df_assert($r->getId());
+		return $r;
+	});}
 
 	/**
 	 * 2019-02-27
@@ -86,6 +98,7 @@ final class Item extends \Df\API\Document {
 	 * Such records have distinct `order_id` values
 	 * and they belong to repetitive order placement attempts.
 	 * @used-by ikf_api_oi()
+	 * @used-by mProduct()
 	 * @used-by store()
 	 * @used-by \Inkifi\Mediaclip\API\Facade\Order\Item::path()
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
@@ -119,7 +132,7 @@ final class Item extends \Df\API\Document {
 
 	/**
 	 * 2019-02-26
-	 * @used-by productM()
+	 * @used-by mProduct()
 	 * @return P
 	 */
 	private function product() {return dfc($this, function() {return df_product(
