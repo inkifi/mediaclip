@@ -50,7 +50,14 @@ final class Pureprint {
 			/** @var array(array(string => mixed)) $items */
 			$d = [
 				'destination' => ['name' => 'pureprint']
-				,'orderData' => ['items' => $items, 'sourceOrderId' => $o->getId()]
+				,'orderData' => [
+					/**
+					 * 2019-04-30
+					 * It seems that `sourceOrderId` should preceed `items`:
+					 * https://www.upwork.com/messages/rooms/room_84b17b85dbea0cd4bc3286cc3b10335e/story_7137161c1e83b1ecf7d51246c81083e1
+					 */
+					'sourceOrderId' => $o->getId(), 'items' => $items
+				]
 				,'shipments' => [$this->pShipment($o)]
 			]; /** @var array(string => array(mixed)) $d */
 			self::zl()->info(json_encode($d));
