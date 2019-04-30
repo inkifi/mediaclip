@@ -220,7 +220,7 @@ final class Pureprint {
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/6
 		// 2019-05-01
 		// The new credentials: https://www.upwork.com/messages/rooms/room_84b17b85dbea0cd4bc3286cc3b10335e/story_1386eca0c7f8e18591996e0751031a8f
-		df_sftp()->open(['host' => 'ftp.pureprint.com', 'password' => '117ZS4PY', 'username' => 'Inkifi']);
+		df_sftp()->open(['host' => 'pureftp.pureprint.com', 'password' => '117ZS4PY', 'username' => 'Inkifi']);
 		df_sftp()->write("/Inkifi/$file", $contents);
 		df_sftp()->close();
 	}
