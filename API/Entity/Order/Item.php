@@ -74,11 +74,10 @@ final class Item extends \Df\API\Document {
 		$r = df_new_om(mP::class); /** @var mP $r */
 		$p = $this->product(); /** @var P $p */
 		$r->loadByPlu(
-			!($o = df_find($this->oi()->getProductOptionByCode('options'), function(array $o) {return
-				'Frame Colour' === $o['label']
-			;}))
-			? $p[implode('_', ['mediaclip', $p['mediaclip_module'], 'product'])]
-			: df_fetch_col('catalog_product_option_type_value', 'sku', 'option_type_id', $o['option_value'])
+			df_first(array_filter(array_map(function(array $o) {return df_first(df_fetch_col(
+				'catalog_product_option_type_value', 'sku', 'option_type_id', $o['option_value']
+			));}, $this->oi()->getProductOptionByCode('options'))))
+			?: $p[implode('_', ['mediaclip', $p['mediaclip_module'], 'product'])]
 		);
 		df_assert($r->getId());
 		return $r;
