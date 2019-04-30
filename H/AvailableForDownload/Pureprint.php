@@ -218,7 +218,9 @@ final class Pureprint {
 		// 2018-08-20 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 		// «FTP upload to ftp.pureprint.com has stopped working»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/6
-		df_sftp()->open(['host' => 'ftp.pureprint.com', 'password' => 'Summ3rD4ys!', 'username' => 'Inkifi']);
+		// 2019-05-01
+		// The new credentials: https://www.upwork.com/messages/rooms/room_84b17b85dbea0cd4bc3286cc3b10335e/story_1386eca0c7f8e18591996e0751031a8f
+		df_sftp()->open(['host' => 'ftp.pureprint.com', 'password' => '117ZS4PY', 'username' => 'Inkifi']);
 		df_sftp()->write("/Inkifi/$file", $contents);
 		df_sftp()->close();
 	}
