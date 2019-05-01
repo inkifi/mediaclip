@@ -3,6 +3,7 @@ A custom integration between [inkifi.com](https://inkifi.com) and [mediaclip.ca]
 ## How to install
 ```
 bin/magento maintenance:enable
+composer clear-cache
 composer require inkifi/mediaclip:*
 bin/magento setup:upgrade
 rm -rf var/di var/generation generated/code && bin/magento setup:di:compile
@@ -15,6 +16,7 @@ bin/magento cache:enable
 ```
 bin/magento maintenance:enable
 rm -rf composer.lock
+composer clear-cache
 composer update inkifi/mediaclip
 bin/magento setup:upgrade
 rm -rf var/di var/generation generated/code && bin/magento setup:di:compile
