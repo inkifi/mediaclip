@@ -46,7 +46,30 @@ final class Pureprint {
 		 * @see \Inkifi\Mediaclip\H\AvailableForDownload::_p()
 		 */
 		$mItems = ikf_api_oi($o->getId()); /** @var mOI[] $mItems */
-		if ($items = df_map($mItems, function(mOI $mOI) {return $this->pOI($mOI);})) {
+		/**
+		 * 2019-05-08
+		 * I have added @uses df_clean():
+		 * 1) «If the customer orders a combination of Pwinty and JSON products,
+		 * then in the JSON file there is a blank '[]' created
+		 * which causes the JSON orders to error with our supplier.
+		 * As examples orders in Magento: 000023205, 000023226, 000023335».
+		 * https://www.upwork.com/messages/rooms/room_84b17b85dbea0cd4bc3286cc3b10335e/story_5acc3cb3192c91eb56b802052016f305
+		 * 2) The JSON for the 000023205 order:
+		 * {
+		 *		"destination": {"name": "pureprint"},
+		 *		"orderData": {
+		 *			"sourceOrderId": "65113",
+		 *			"items": [
+		 *				{<...>},
+		 *				[],
+		 *				[],
+		 *				{<...>}
+		 *			]
+		 *		},
+		 *		"shipments": [{<...>}]
+		 *	}
+		 */
+		if ($items = df_clean(df_map($mItems, function(mOI $mOI) {return $this->pOI($mOI);}))) {
 			/** @var array(array(string => mixed)) $items */
 			$d = [
 				'destination' => ['name' => 'pureprint']
