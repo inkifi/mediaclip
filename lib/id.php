@@ -29,5 +29,6 @@ function ikf_eti($v) {return (int)df_last(explode('-', $v));}
  */
 function ikf_ite($v) {return dfcf(function($v) {
 	list($v, $s) = $v instanceof O ? [$v->getId(), $v->getStore()] : [$v, null]; /** @var Store|null $s */
-	return !df_contains(S::s()->id($s), 'staging') ? $v : "staging-$v";
+	$p = 'staging'; /** @param string $p */
+	return !df_contains(S::s()->id($s), $p) ? $v : df_prepend($v, "$p-");
 }, [$v]);}

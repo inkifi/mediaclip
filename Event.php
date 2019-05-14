@@ -121,7 +121,7 @@ final class Event extends \Df\API\Document {
 	 * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
 	 * @return MO
 	 */
-	function mo() {return dfc($this, function() {return MO::byOIdE($this->oidE());});}
+	function mo() {return dfc($this, function() {return MO::byOId($this->oidE());});}
 
 	/**
 	 * 2019-02-27
