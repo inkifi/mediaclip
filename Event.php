@@ -141,11 +141,14 @@ final class Event extends \Df\API\Document {
 	 * @return OI
 	 */
 	function oi() {return dfc($this, function() {
-		$oic = df_oic(); /** @var OIC $oic */
-		$oic->addFieldToFilter('mediaclip_project_id', ['eq' => $this->projectId()]);
-		$oic->addFieldToFilter('order_id', ['eq' => $this->oidI()]);
-		df_assert_eq(1, $oic->count());
-		return $oic->getFirstItem();
+		$c = df_oic(); /** @var OIC $c */
+		$c->addFieldToFilter('mediaclip_project_id', ['eq' => $this->projectId()]);
+		$c->addFieldToFilter('order_id', ['eq' => $oid = $this->oidI()]); /** @var int $oid */
+		df_assert_le(1, $count = $c->count()); /** @var int $count */
+		if (!$count) {
+			df_error("The order $oid does not have items for the Mediaclip project {$this->projectId()}.");
+		}
+		return $c->getFirstItem();
 	});}
 
 	/**
