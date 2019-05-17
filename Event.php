@@ -142,13 +142,18 @@ final class Event extends \Df\API\Document {
 	 */
 	function oi() {return dfc($this, function() {
 		$c = df_oic(); /** @var OIC $c */
-		$c->addFieldToFilter('mediaclip_project_id', ['eq' => $this->projectId()]);
 		$c->addFieldToFilter('order_id', ['eq' => $oid = $this->oidI()]); /** @var int $oid */
-		df_assert_le(1, $count = $c->count()); /** @var int $count */
-		if (!$count) {
-			df_error("The order $oid does not have items for the Mediaclip project {$this->projectId()}.");
-		}
-		return $c->getFirstItem();
+		/**
+		 * 2019-05-18
+		 * The previous code was:
+		 * 		$c->addFieldToFilter('mediaclip_project_id', ['eq' => $this->projectId()]);
+		 * But sometimes the `mediaclip_project_id` field is empty for an unknown reason:
+		 * https://log.mage2.pro/inkifi/mangoit/issues/271
+		 */
+		df_assert_le(1, $c->count()); /** @var int $count */
+		// 2019-05-18 «70ae2a6f-d5fe-4904-989d-bdc6337f54c0»
+		$pid = $this->projectId(); /** @var string $pid */
+		return df_find($c, function(OI $i) use($pid) {return $pid === ikf_oi_pid($i);});
 	});}
 
 	/**

@@ -5,6 +5,7 @@ use Mangoit\MediaclipHub\Model\Mediaclip;
 /**
  * 2019-01-31
  * @used-by \Inkifi\Consolidation\Processor::pids()
+ * @used-by \Inkifi\Mediaclip\Event::oi()
  * @used-by \Mangoit\MediaclipHub\Observer\CheckoutSuccess::post()
  * @param OI $oi
  * @return string|null
