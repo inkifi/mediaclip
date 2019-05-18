@@ -37,6 +37,7 @@ function ikf_api_oi($id, $printer = null) {
 		$r = array_filter($r, function(mOI $i) use($printer) {return
 			$printer === ikf_product_printer($i->oi())
 		;});
+		// 2019-05-19 https://log.mage2.pro/inkifi/mangoit/issues/271
 		if (!$r) {
 			df_error("The order $id does not have items for $printer.\nAll items:\n%s",
 				df_json_encode($itemsA)
