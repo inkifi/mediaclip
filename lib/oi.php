@@ -1,4 +1,5 @@
 <?php
+use Df\Core\Exception as DFE;
 use Inkifi\Mediaclip\API\Entity\Order\Item as mOI;
 use Inkifi\Mediaclip\API\Facade\Order as F;
 /**
@@ -26,11 +27,21 @@ use Inkifi\Mediaclip\API\Facade\Order as F;
  * @param int $id
  * @param string|null $printer [optional]
  * @return mOI[]
+ * @throws DFE
  */
 function ikf_api_oi($id, $printer = null) {
 	/** @var mOI[] $r */
-	$r = df_map(F::s()->get(ikf_ite($id))['lines'], function(array $i) {return new mOI($i);});
-	return !$printer ? $r : array_filter($r, function(mOI $i) use($printer) {return
-		$printer === ikf_product_printer($i->oi())
-	;});
+	$itemsA = F::s()->get(ikf_ite($id))['lines']; /** @var array(array(string => mixed)) $itemsA */
+	$r = df_map($itemsA, function(array $i) {return new mOI($i);});
+	if ($printer) {
+		$r = array_filter($r, function(mOI $i) use($printer) {return
+			$printer === ikf_product_printer($i->oi())
+		;});
+		if (!$r) {
+			df_error("The order $id does not have items for $printer.\nAll items:\n%s",
+				df_json_encode($itemsA)
+			);
+		}
+	}
+	return $r;
 }

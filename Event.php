@@ -153,7 +153,9 @@ final class Event extends \Df\API\Document {
 		df_assert_le(1, $c->count()); /** @var int $count */
 		// 2019-05-18 «70ae2a6f-d5fe-4904-989d-bdc6337f54c0»
 		$pid = $this->projectId(); /** @var string $pid */
-		return df_find($c, function(OI $i) use($pid) {return $pid === ikf_oi_pid($i);});
+		return df_assert(df_find($c, function(OI $i) use($pid) {return $pid === ikf_oi_pid($i);}),
+			"The order $oid does not have items for the Mediaclip project $pid."
+		);
 	});}
 
 	/**
