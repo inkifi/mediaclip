@@ -150,7 +150,6 @@ final class Event extends \Df\API\Document {
 		 * But sometimes the `mediaclip_project_id` field is empty for an unknown reason:
 		 * https://log.mage2.pro/inkifi/mangoit/issues/271
 		 */
-		df_assert_le(1, $c->count()); /** @var int $count */
 		// 2019-05-18 «70ae2a6f-d5fe-4904-989d-bdc6337f54c0»
 		$pid = $this->projectId(); /** @var string $pid */
 		// 2019-05-19 https://log.mage2.pro/inkifi/mangoit/issues/271
