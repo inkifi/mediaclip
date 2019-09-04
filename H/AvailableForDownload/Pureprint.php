@@ -144,8 +144,7 @@ final class Pureprint {
 			 *		}
 			*/
 			$oi = $mOI->oi(); /** @var OI $oi */
-			/** @var string $mod */
-			$mod = df_attribute_set(df_product($oi->getProductId()))->getAttributeSetName();
+			$mod = df_att_set_name(df_product($oi->getProductId())); /** @var string $mod */
 			$r = [
 				'sku' => $mP->plu()
 				,'sourceItemId' => $mOI->id()

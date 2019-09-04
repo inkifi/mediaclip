@@ -1,6 +1,6 @@
 {
 	"name": "inkifi/mediaclip"
-	,"version": "1.2.7"
+	,"version": "1.2.8"
 	,"description": "A custom integration between inkifi.com and mediaclip.ca"
 	,"type": "magento2-module"
 	,"homepage": "https://github.com/inkifi/mediaclip"
@@ -11,7 +11,7 @@
 		,"homepage": "https://mage2.pro/users/dmitry_fedyuk"
 		,"role": "Developer"
 	}]
-	,"require": {"mage2pro/core": ">=4.4.1"}
+	,"require": {"mage2pro/core": ">=5.1.2"}
 	,"autoload": {"files": ["registration.php"], "psr-4": {"Inkifi\\Mediaclip\\": ""}}
 	,"keywords": ["Magento 2"]
 }
