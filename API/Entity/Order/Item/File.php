@@ -23,7 +23,7 @@ namespace Inkifi\Mediaclip\API\Entity\Order\Item;
  *		}
  * @used-by \Inkifi\Mediaclip\API\Facade\Order\Item::files()
  */
-final class File extends \Df\API\Document {
+final class File extends \Df\Core\O {
 	/**
 	 * 2019-03-12
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::code()

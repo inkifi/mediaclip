@@ -74,7 +74,7 @@ use Mangoit\MediaclipHub\Setup\UpgradeSchema as Schema;
  * See the 54609 order as an example: https://inkifi.com/canvaspr_admin/sales/order/view/order_id/54609
  * I do not know how to identify an order item in an event in this case.
  */
-final class Event extends \Df\API\Document {
+final class Event extends \Df\Core\O {
 	/**
 	 * 2019-03-13
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload::_p()

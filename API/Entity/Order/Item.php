@@ -25,7 +25,7 @@ use Mangoit\MediaclipHub\Model\Product as mP;
  *	}
  * @used-by ikf_api_oi()
  */
-final class Item extends \Df\API\Document {
+final class Item extends \Df\Core\O {
 	/**
 	 * 2019-03-04
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
