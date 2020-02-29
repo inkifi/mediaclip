@@ -36,7 +36,7 @@ final class Client extends \Df\API\Client {
 	 * 2019-01-11
 	 * @override
 	 * @see \Df\API\Client::responseValidatorC()
-	 * @used-by \Df\API\Client::p()
+	 * @used-by \Df\API\Client::_p()
 	 * @return string
 	 */
 	protected function responseValidatorC() {return \Inkifi\Mediaclip\API\Validator::class;}
