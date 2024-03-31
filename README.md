@@ -1,4 +1,4 @@
-A custom integration between [inkifi.com](https://inkifi.com) and [mediaclip.ca](https://www.mediaclip.ca).  
+A custom integration between [inkifi.com](https://inkifi.com) (Magento 2) and [mediaclip.ca](https://www.mediaclip.ca).  
 
 ## How to install
 ```
