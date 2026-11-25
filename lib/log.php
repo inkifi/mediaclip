@@ -2,7 +2,7 @@
 use Zend\Log\Logger as L;
 use Zend\Log\Writer\Stream as W;
 /**
- * 2019-02-24 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+ * 2019-02-24 Dmitry Fedyuk https://github.com/dmitrii-fediuk
  * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::_p()
  * @used-by \Inkifi\Mediaclip\H\Shipped::p()
  * @used-by \Mangoit\MediaclipHub\Controller\Index\OneflowResponse::execute()

@@ -22,7 +22,7 @@ final class Pureprint {
 	 */
 	private function _p() {
 		$ev = Ev::s(); /** @var Ev $ev */
-		// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+		// 2018-08-16 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 		// «Modify orders numeration for Mediaclip»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 		$o = $ev->o(); /** @var O $o */
@@ -84,7 +84,7 @@ final class Pureprint {
 				,'shipments' => [$this->pShipment($o)]
 			]; /** @var array(string => array(mixed)) $d */
 			self::zl()->info(json_encode($d));
-			// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+			// 2018-08-16 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 			// "Replace the «/home/canvaspr/dev2.inkifi.com/html/ftp_json25june/»
 			// hardcoded filesystem path with a dynamics one":
 			// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/3
@@ -96,7 +96,7 @@ final class Pureprint {
 	}
 
 	/**
-	 * 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+	 * 2018-11-02 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 	 * «Generate JSON data for photo-books»: https://www.upwork.com/ab/f/contracts/21011549
 	 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
 	 * @used-by pOI()
@@ -119,7 +119,7 @@ final class Pureprint {
 		$mP = $mOI->mProduct(); /** @var mP $mP */
 		if ($mP->sendJson() && ($files = $mOI->files())) { /** @var F[] $files */
 			/**
-			 * 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+			 * 2018-11-02 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 			 * «Generate JSON data for photo-books»
 			 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
 			 * 2019-03-12
@@ -237,7 +237,7 @@ final class Pureprint {
 	 * @param string $contents
 	 */
 	private static function writeRemote($file, $contents) {
-		// 2018-08-20 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+		// 2018-08-20 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 		// «FTP upload to ftp.pureprint.com has stopped working»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/6
 		// 2019-05-01
